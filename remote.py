@@ -1,4 +1,5 @@
-from git import Repo, InvalidGitRepositoryError, Commit
+from git import Repo
+
 
 class Remote():
     remote: str

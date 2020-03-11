@@ -20,7 +20,7 @@ class Api():
         if len(uri) < 5:
             raise ValueError("uri passed must contain owner and repository")
 
-        self.endpoint = 'https://' + uri[2] +  '/api/v4/projects/'
+        self.endpoint = 'https://' + uri[2] + '/api/v4/projects/'
         self.endpoint = self.endpoint + uri[3] + '%2F' + uri[4]
 
         self.host = 'https://' + uri[2]
@@ -32,7 +32,7 @@ class Api():
         from pathlib import Path
         import os
         cachefile = Path(self.uri.replace("https://",  "").replace("/", "."))
-        cachedir = Path(os.environ.get('XDG_CACHE_HOME', os.environ.get('HOME')) + '/mkmr')
+        cachedir = Path(os.environ.get('XDG_CACHE_HOME') + '/mkmr')
 
         cachepath = cachedir / cachefile
 
