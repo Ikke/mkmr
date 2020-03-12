@@ -7,7 +7,7 @@ class API():
     endpoint: str
     projectid: int
 
-    def __init__(self, repo: Repo, remote="origin"):
+    def __init__(self, repo: Repo, remote: str):
         """
         Check that we were given a valid remote
         """
