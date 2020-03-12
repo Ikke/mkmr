@@ -91,7 +91,18 @@ def main():
         else:
             target_branch = "master"
 
-    message = repo.head.commit.message.partition('\n')
+    str = options.upstream + '/' + target_branch
+    str = str + '..' + source_branch
+    commit_count = len(list(repo.iter_commits(str)))
+
+    if commit_count == 1:
+        commit = repo.head.commit
+    else:
+        # TODO: make it prompt the user to pick the correct
+        # commit, preferably with a python equivalent to fzf
+        commit = repo.head.commit
+
+    message = commit.message.partition('\n')
 
     if options.title is not None:
         title = options.title
