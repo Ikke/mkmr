@@ -143,7 +143,7 @@ def main():
             labels.append("A-backport")
             labels.append('v' + alpine_prefix)
 
-    if commit_count == 1:
+    if commit_count < 2:
         commit = repo.head.commit
     else:
         try:
