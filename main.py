@@ -121,6 +121,24 @@ def main():
     origin = API(repo, options.origin)
     upstream = API(repo, options.upstream)
 
+    # git pull --rebase the source branch on top of the target branch
+    str = repo.git.pull(
+                       options.upstream,
+                       "--rebase",
+                       target_branch
+                       )
+    if str != '':
+        print(str)
+
+    if options.dry_run is False:
+        # git push --quiet upstream source_branch:source_branch
+        str = repo.git.push(
+                           options.origin,
+                           (source_branch + ":" + source_branch)
+                           )
+        if str != '':
+            print(str)
+
     if options.dry_run is True:
         print("source_branch:", source_branch)
         print("target_branch:", target_branch)
