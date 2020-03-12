@@ -126,14 +126,19 @@ def main():
     # Automatically add nice labels to help Alpine Linux
     # reviewers and developers sort out what is important
     if alpine is True:
-        if any(": new aport" in s for s in commit_titles):
-            labels.append("A-add")
-        if any(": move from " in s for s in commit_titles):
-            labels.append("A-move")
-        if any(": upgrade to " in s for s in commit_titles):
-            labels.append("A-upgrade")
-        if any(": security upgrade to " in s for s in commit_titles):
-            labels.append("T-Security")
+        for s in commit_titles:
+            if ": new aport" in s:
+                labels.append("A-add")
+                continue
+            if ": move from " in s:
+                labels.append("A-move")
+                continue
+            if ": upgrade to " in s:
+                labels.append("A-upgrade")
+                continue
+            if ": security upgrade to " in s:
+                labels.append("T-Security")
+                continue
         if alpine_prefix is not None:
             labels.append("A-backport")
             labels.append('v' + alpine_prefix)
@@ -158,7 +163,6 @@ def main():
                               ),
             ]
             answers = inquirer.prompt(questions)
-            print(answers['commit'])
 
             # Remove this once the TODO above is fixed
             commit = repo.head.commit
@@ -196,8 +200,6 @@ def main():
                       (source_branch + ":" + source_branch)
                       )
 
-    labelstr = "'" + ','.join(labels) + "'"
-
     if options.dry_run is True:
         print("source_branch:", source_branch)
         print("target_branch:", target_branch)
@@ -227,7 +229,7 @@ def main():
                                              'title': title,
                                              'description': description,
                                              'target_project_id': upstream.projectid,
-                                             'labels': labelstr
+                                             'labels': labels
                                              },
                                              retry_transient_errors=True)
 
