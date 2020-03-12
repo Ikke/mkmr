@@ -60,6 +60,7 @@ def main():
     parser.add_option("--dry-run",
                       dest="dry_run",
                       action="store_true",
+                      default=False,
                       help="don't make the merge request, just show how it would look like")
 
     (options, args) = parser.parse_args(sys.argv)
@@ -123,6 +124,7 @@ def main():
 
     # git pull --rebase the source branch on top of the target branch
     str = repo.git.pull(
+                       "--quiet",
                        options.upstream,
                        "--rebase",
                        target_branch
