@@ -122,9 +122,10 @@ def main():
     str = str + '..' + source_branch
     commits = list(repo.iter_commits(str))
     commit_count = len(commits)
-    commit_titles = []
+    commit_titles = dict()
     for c in commits:
-        commit_titles.append(c.message.partition('\n')[0])
+        cstr = c.message.partition('\n')
+        commit_titles.update([(cstr[0], c)])
 
     labels = []
 
@@ -172,9 +173,7 @@ def main():
                               ),
             ]
             answers = inquirer.prompt(questions)
-
-            # Remove this once the TODO above is fixed
-            commit = repo.head.commit
+            commit = commit_titles[answers['commit']]
 
     message = commit.message.partition('\n')
 
