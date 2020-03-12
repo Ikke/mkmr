@@ -141,9 +141,27 @@ def main():
     if commit_count == 1:
         commit = repo.head.commit
     else:
-        # TODO: make it prompt the user to pick the correct
-        # commit, preferably with a python equivalent to fzf
-        commit = repo.head.commit
+        try:
+            import inquirer
+        except ImportError:
+            commit = repo.head.commit
+        else:
+            # TODO: make it so we can select an actual commit
+            # object, but show the titles to the user
+            # this currently allows the user to pick a title
+            # but it will fail to provide a description
+            questions = [
+                inquirer.List('commit',
+                              message="Please pick a commit",
+                              choices=commit_titles,
+                              carousel=True
+                              ),
+            ]
+            answers = inquirer.prompt(questions)
+            print(answers['commit'])
+
+            # Remove this once the TODO above is fixed
+            commit = repo.head.commit
 
     message = commit.message.partition('\n')
 
