@@ -109,6 +109,15 @@ def main():
         else:
             target_branch = "master"
 
+    # git pull --rebase the source branch on top of the target branch
+    if options.dry_run is False:
+        repo.git.pull(
+                      "--quiet",
+                      options.upstream,
+                      "--rebase",
+                      target_branch
+                      )
+
     str = options.upstream + '/' + target_branch
     str = str + '..' + source_branch
     commits = list(repo.iter_commits(str))
@@ -233,7 +242,12 @@ def main():
                                              },
                                              retry_transient_errors=True)
 
-    print(mr.attributes)
+    print("id:", mr.attributes['id'])
+    print("title:", mr.attributes['title'])
+    print("state:", mr.attributes['state'])
+    print("target_branch:", mr.attributes['target_branch'])
+    print("source_branch:", mr.attributes['source_branch'])
+    print("url:", mr.attributes['web_url'])
 
 
 if __name__ == "__main__":
