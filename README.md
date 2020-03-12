@@ -10,7 +10,7 @@ The packages for Alpine Linux, please check the equivalents for your distributio
 * py3-urllib
 * py3-gitlab
 
-The following is optional and won't affect anything at the current moment, but will in the future allow users to pick which commit they want to derive the title and description of the merge request from:
+The follow is optional but highly recommended, it allows mkmr to prompt the user to select which commit from which the title and description of the merge request will be derived.
 
 * py3-inquirer
 
