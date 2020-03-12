@@ -57,6 +57,10 @@ def main():
                       action="store",
                       type="string",
                       help="Description of the merge request")
+    parser.add_option("--dry-run",
+                      dest="dry_run",
+                      action="store_true",
+                      help="don't make the merge request, just show how it would look like")
 
     (options, args) = parser.parse_args(sys.argv)
 
@@ -106,26 +110,27 @@ def main():
     origin = API(repo, options.origin)
     upstream = API(repo, options.upstream)
 
-    print(source_branch)
-    print(target_branch)
-    print(title)
-    print(description)
+    if options.dry_run is True:
+        print("source_branch:", source_branch)
+        print("target_branch:", target_branch)
+        print("title:", title)
+        for l in description.split('\n'):
+            print("description:", l)
+        print("target_project_id:", upstream.projectid)
 
-    print(origin.host)
-    print(origin.uri)
-    print(origin.endpoint)
-    print(origin.projectid)
-
-    print(upstream.host)
-    print(upstream.uri)
-    print(upstream.endpoint)
-    print(upstream.projectid)
+        # This is equivalent to git rev-list
+        str = options.upstream + '/' + target_branch
+        str = str + '..' + source_branch
+        commit_count = len(list(repo.iter_commits(str)))
+        print("commits:", commit_count)
+        sys.exit(0)
 
     # Using upstream.host or origin.host here is irrelevant since we don't have
     # a federated GitLab, hosts only talk to themselves
     gl = gitlab.Gitlab(upstream.host, private_token=options.token)
 
-    origin_project = gl.projects.get(origin.projectid)
+    origin_project = gl.projects.get(origin.projectid,
+                                     retry_transient_errors=True)
 
     mr = origin_project.mergerequests.create({
                                              'source_branch': source_branch,
@@ -133,7 +138,8 @@ def main():
                                              'title': title,
                                              'description': description,
                                              'target_project_id': upstream.projectid
-                                             })
+                                             },
+                                             retry_transient_errors=True)
 
     print(mr.attributes)
 
