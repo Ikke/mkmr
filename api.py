@@ -1,16 +1,26 @@
-class Api():
+from git import Repo
+
+
+class API():
     host: str
     uri: str
     endpoint: str
     projectid: int
 
-    def __init__(self, uri):
+    def __init__(self, repo: Repo, remote="origin"):
+        """
+        Check that we were given a valid remote
+        """
+        if remote in repo.remotes:
+            self.uri = repo.remotes[remote].url
+        else:
+            raise ValueError("Remote passed does not exist in repository")
+
         """
         if we have https:// then just apply it, if we have ssh then
         try to convert it to https://, if we have any other then raise
         a ValueError
         """
-        self.uri = uri
         if self.uri.startswith("git@"):
             self.uri = self.uri.replace(":", "/").replace("git@", "https://")
         if self.uri.endswith(".git"):
@@ -25,6 +35,10 @@ class Api():
 
         self.host = 'https://' + uri[2]
 
+        # Initialize the value of self.projectid, it will use the cache
+        # whenever possible
+        self.projectid = self.projectid()
+
     def projectid(self) -> int:
         """
         Try to get cached project id
@@ -37,8 +51,7 @@ class Api():
         cachepath = cachedir / cachefile
 
         if cachepath.is_file():
-            self.projectid = cachepath.read_text()
-            return self.projectid
+            return int(cachepath.read_text())
 
         if not cachedir.exists():
             cachedir.mkdir(parents=True)
@@ -56,5 +69,4 @@ class Api():
         f = urllib.request.urlopen(self.endpoint).read()
         j = json.loads(f.decode('utf-8'))
         cachepath.write_text(str(j['id']))
-        self.projectid = j['id']
-        return self.projectid
+        return j['id']
