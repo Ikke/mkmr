@@ -201,13 +201,6 @@ def main():
                       target_branch
                       )
 
-        # git push --quiet upstream source_branch:source_branch
-        repo.git.push(
-                      "--quiet",
-                      options.origin,
-                      (source_branch + ":" + source_branch)
-                      )
-
     if options.dry_run is True:
         print("source_branch:", source_branch)
         print("target_branch:", target_branch)
