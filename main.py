@@ -57,6 +57,11 @@ def main():
                       action="store",
                       type="string",
                       help="Description of the merge request")
+    parser.add_option("--labels",
+                      dest="labels",
+                      action="store",
+                      type="string",
+                      help="comma separated list of labels for the merge request")
     parser.add_option("--dry-run",
                       dest="dry_run",
                       action="store_true",
@@ -78,23 +83,60 @@ def main():
     # Initialize our repo object based on the local repo we have
     repo = Repo()
 
+    # Call the API using our local repo and have one for remote
+    # origin and remote upstream
+    origin = API(repo, options.origin)
+    upstream = API(repo, options.upstream)
+
     if options.source is not None:
         source_branch = options.source
     else:
         source_branch = repo.active_branch.name
 
+    # Enable alpine-specific features
+    if "gitlab.alpinelinux.org" in upstream.host:
+        alpine = True
+        alpine_prefix = alpine_stable_prefix(source_branch)
+    else:
+        alpine = False
+        alpine_prefix = None
+
     if options.target is not None:
         target_branch = options.target
     else:
-        target_branch = alpine_stable_prefix(source_branch)
-        if target_branch is not None:
-            target_branch = target_branch + '-stable'
+        if alpine_prefix is not None:
+            target_branch = alpine_prefix + '-stable'
         else:
             target_branch = "master"
 
     str = options.upstream + '/' + target_branch
     str = str + '..' + source_branch
-    commit_count = len(list(repo.iter_commits(str)))
+    commits = list(repo.iter_commits(str))
+    commit_count = len(commits)
+    commit_titles = []
+    for c in commits:
+        commit_titles.append(c.message.partition('\n')[0])
+
+    labels = []
+
+    if options.labels is not None:
+        for l in options.labels.split(','):
+            labels.append(l)
+
+    # Automatically add nice labels to help Alpine Linux
+    # reviewers and developers sort out what is important
+    if alpine is True:
+        if any(": new aport" in s for s in commit_titles):
+            labels.append("A-add")
+        if any(": move from " in s for s in commit_titles):
+            labels.append("A-move")
+        if any(": upgrade to " in s for s in commit_titles):
+            labels.append("A-upgrade")
+        if any(": security upgrade to " in s for s in commit_titles):
+            labels.append("T-Security")
+        if alpine_prefix is not None:
+            labels.append("A-backport")
+            labels.append('v' + alpine_prefix)
 
     if commit_count == 1:
         commit = repo.head.commit
@@ -110,6 +152,9 @@ def main():
     else:
         title = message[0]
 
+    if alpine_prefix is not None:
+        title = '[' + alpine_prefix + '] ' + title
+
     if options.description is not None:
         description = options.description
     else:
@@ -117,43 +162,38 @@ def main():
         # between the title and the description
         description = '\n'.join(message[2:])
 
-    # Call the API using our local repo and have one for remote
-    # origin and remote upstream
-    origin = API(repo, options.origin)
-    upstream = API(repo, options.upstream)
-
     # git pull --rebase the source branch on top of the target branch
-    str = repo.git.pull(
-                       "--quiet",
-                       options.upstream,
-                       "--rebase",
-                       target_branch
-                       )
-    if str != '':
-        print(str)
-
     if options.dry_run is False:
+        repo.git.pull(
+                      "--quiet",
+                      options.upstream,
+                      "--rebase",
+                      target_branch
+                      )
+
         # git push --quiet upstream source_branch:source_branch
-        str = repo.git.push(
-                           options.origin,
-                           (source_branch + ":" + source_branch)
-                           )
-        if str != '':
-            print(str)
+        repo.git.push(
+                      "--quiet",
+                      options.origin,
+                      (source_branch + ":" + source_branch)
+                      )
+
+    labelstr = "'" + ','.join(labels) + "'"
 
     if options.dry_run is True:
         print("source_branch:", source_branch)
         print("target_branch:", target_branch)
+        for l in commit_titles:
+            print("commit:", l)
         print("title:", title)
         for l in description.split('\n'):
             print("description:", l)
         print("target_project_id:", upstream.projectid)
+        for l in labels:
+            print("labels:", l)
 
         # This is equivalent to git rev-list
-        str = options.upstream + '/' + target_branch
-        str = str + '..' + source_branch
-        commit_count = len(list(repo.iter_commits(str)))
-        print("commits:", commit_count)
+        print("commit count:", commit_count)
         sys.exit(0)
 
     # Using upstream.host or origin.host here is irrelevant since we don't have
@@ -168,7 +208,8 @@ def main():
                                              'target_branch': target_branch,
                                              'title': title,
                                              'description': description,
-                                             'target_project_id': upstream.projectid
+                                             'target_project_id': upstream.projectid,
+                                             'labels': labelstr
                                              },
                                              retry_transient_errors=True)
 
