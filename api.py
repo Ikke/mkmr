@@ -6,6 +6,8 @@ class API():
     uri: str
     endpoint: str
     projectid: int
+    user: str
+    project: str
 
     def __init__(self, repo: Repo, remote: str):
         """
@@ -32,6 +34,9 @@ class API():
 
         self.endpoint = 'https://' + uri[2] + '/api/v4/projects/'
         self.endpoint = self.endpoint + uri[3] + '%2F' + uri[4]
+
+        self.user = uri[3]
+        self.project = uri[4]
 
         self.host = 'https://' + uri[2]
 
