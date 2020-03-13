@@ -2,6 +2,7 @@ from optparse import OptionParser
 from api import API
 from git import Repo
 import inquirer
+import editor
 import gitlab
 import sys
 
@@ -53,6 +54,11 @@ def main():
                       action="store",
                       type="string",
                       help="title of the merge request")
+    parser.add_option("--edit",
+                      dest="edit",
+                      action="store_true",
+                      default=False,
+                      help="Edit title and description in $VISUAL or $EDITOR")
     parser.add_option("--description",
                       dest="description",
                       action="store",
@@ -194,6 +200,10 @@ def main():
         # Don't do [1:] because git descriptions have one blank line separating
         # between the title and the description
         description = '\n'.join(message[2:])
+
+    if options.edit is True:
+        title = editor.edit(contents=title)
+        description = editor.edit(contents=description)
 
     if options.yes is False or options.dry_run is True:
         print("GitLab Instance:", upstream.host)
