@@ -9,9 +9,6 @@ The packages for Alpine Linux, please check the equivalents for your distributio
 * py3-gitpython
 * py3-urllib
 * py3-gitlab
-
-The follow is optional but highly recommended, it allows mkmr to prompt the user to select which commit from which the title and description of the merge request will be derived.
-
 * py3-inquirer
 
 ## License
