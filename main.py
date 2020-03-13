@@ -77,7 +77,8 @@ def main():
                       help="don't make the merge request, just show how it "
                            "would look like. Note that using this disables "
                            "rebasing on top of the target branch, so some "
-                           "results may be innacurate")
+                           "results, like how many commits there are between "
+                           "your branch and upstream, may be innacurate")
 
     (options, args) = parser.parse_args(sys.argv)
 
@@ -202,7 +203,7 @@ def main():
         print("Target Branch:", target_branch, '\n')
 
         print("title:", title)
-        for l in description.split('\n'):
+        for l in description.splitlines():
             print("description:", l)
         for l in commit_titles:
             print("commit:", l)
@@ -218,7 +219,7 @@ def main():
     if options.yes is True:
         choice = True
     else:
-        choice = inquirer.confirm("Try to create Merge Request with the values "
+        choice = inquirer.confirm("Create Merge Request with the values "
                                   "shown above?", default=True)
 
     if choice is False:
