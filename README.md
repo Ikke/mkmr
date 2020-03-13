@@ -9,6 +9,7 @@ The packages for Alpine Linux, please check the equivalents for your distributio
 * py3-gitpython
 * py3-urllib
 * py3-gitlab
+* py3-python-editor
 * py3-inquirer
 
 ## License
