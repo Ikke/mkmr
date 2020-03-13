@@ -28,7 +28,7 @@ setup(name='mkmr',
       },
       install_requires=[
           'gitpython>=3.0.0,<4',
-          'gitlab>=2.0.0,<3',
+          'python-gitlab>=2.0.0,<3',
           'python-editor>=1.0.0,<2',
           'inquirer>=2.6.0,<3',
       ])
