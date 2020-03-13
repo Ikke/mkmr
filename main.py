@@ -194,26 +194,20 @@ def main():
         # between the title and the description
         description = '\n'.join(message[2:])
 
-    # git pull --rebase the source branch on top of the target branch
-    if options.dry_run is False:
-        repo.git.pull(
-                      "--quiet",
-                      options.upstream,
-                      "--rebase",
-                      target_branch
-                      )
-
     if options.yes is False or options.dry_run is True:
-        print("source_branch:", source_branch)
-        print("target_branch:", target_branch)
-        for l in commit_titles:
-            print("commit:", l)
+        print("GitLab Instance:", upstream.host)
+        print("Source Project:", (origin.user + '/' + origin.project))
+        print("Target Project:", (upstream.user + '/' + upstream.project))
+        print("Source Branch:", source_branch)
+        print("Target Branch:", target_branch, '\n')
+
         print("title:", title)
         for l in description.split('\n'):
             print("description:", l)
-        print("target_project_id:", upstream.projectid)
+        for l in commit_titles:
+            print("commit:", l)
         for l in labels:
-            print("labels:", l)
+            print("label:", l)
 
         # This is equivalent to git rev-list
         print("commit count:", commit_count)
@@ -224,8 +218,8 @@ def main():
     if options.yes is True:
         choice = True
     else:
-        choice = inquirer.confirm("Create Merge Request with the values "
-                                  "from above?", default=True)
+        choice = inquirer.confirm("Try to create Merge Request with the values "
+                                  "shown above?", default=True)
 
     if choice is False:
         sys.exit(0)
@@ -247,11 +241,9 @@ def main():
                                              },
                                              retry_transient_errors=True)
 
-    print("id:", mr.attributes['id'])
+    print("id:", mr.attributes['iid'])
     print("title:", mr.attributes['title'])
     print("state:", mr.attributes['state'])
-    print("target_branch:", mr.attributes['target_branch'])
-    print("source_branch:", mr.attributes['source_branch'])
     print("url:", mr.attributes['web_url'])
 
 
