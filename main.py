@@ -1,6 +1,7 @@
 from optparse import OptionParser
 from api import API
 from git import Repo
+import inquirer
 import gitlab
 import sys
 
@@ -61,12 +62,22 @@ def main():
                       dest="labels",
                       action="store",
                       type="string",
-                      help="comma separated list of labels for the merge request")
+                      help="comma separated list of labels for the merge "
+                           "request")
+    parser.add_option("--yes",
+                      dest="yes",
+                      action="store_true",
+                      default=False,
+                      help="Don't prompt for user confirmation before making "
+                           "merge request")
     parser.add_option("--dry-run",
                       dest="dry_run",
                       action="store_true",
                       default=False,
-                      help="don't make the merge request, just show how it would look like")
+                      help="don't make the merge request, just show how it "
+                           "would look like. Note that using this disables "
+                           "rebasing on top of the target branch, so some "
+                           "results may be innacurate")
 
     (options, args) = parser.parse_args(sys.argv)
 
@@ -156,24 +167,15 @@ def main():
     if commit_count < 2:
         commit = repo.head.commit
     else:
-        try:
-            import inquirer
-        except ImportError:
-            commit = repo.head.commit
-        else:
-            # TODO: make it so we can select an actual commit
-            # object, but show the titles to the user
-            # this currently allows the user to pick a title
-            # but it will fail to provide a description
-            questions = [
-                inquirer.List('commit',
-                              message="Please pick a commit",
-                              choices=commit_titles,
-                              carousel=True
-                              ),
-            ]
-            answers = inquirer.prompt(questions)
-            commit = commit_titles[answers['commit']]
+        questions = [
+            inquirer.List('commit',
+                          message="Please pick a commit",
+                          choices=commit_titles,
+                          carousel=True
+                          ),
+        ]
+        answers = inquirer.prompt(questions)
+        commit = commit_titles[answers['commit']]
 
     message = commit.message.partition('\n')
 
@@ -201,7 +203,7 @@ def main():
                       target_branch
                       )
 
-    if options.dry_run is True:
+    if options.yes is False or options.dry_run is True:
         print("source_branch:", source_branch)
         print("target_branch:", target_branch)
         for l in commit_titles:
@@ -215,6 +217,17 @@ def main():
 
         # This is equivalent to git rev-list
         print("commit count:", commit_count)
+
+    if options.dry_run is True:
+        sys.exit(0)
+
+    if options.yes is True:
+        choice = True
+    else:
+        choice = inquirer.confirm("Create Merge Request with the values "
+                                  "from above?", default=True)
+
+    if choice is False:
         sys.exit(0)
 
     # Using upstream.host or origin.host here is irrelevant since we don't have
