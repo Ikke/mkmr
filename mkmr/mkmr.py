@@ -1,5 +1,5 @@
 from optparse import OptionParser
-from api import API
+from mkmr.api import API
 from git import Repo
 import inquirer
 import editor
@@ -202,8 +202,8 @@ def main():
         description = '\n'.join(message[2:])
 
     if options.edit is True:
-        title = editor.edit(contents=title)
-        description = editor.edit(contents=description)
+        title = editor.edit(contents=title).decode('utf-8')
+        description = editor.edit(contents=description).decode('utf-8')
 
     if options.yes is False or options.dry_run is True:
         print("GitLab Instance:", upstream.host)
