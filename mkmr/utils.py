@@ -13,12 +13,20 @@ def find_config(p):
         xdgpath = path.join(xdgpath, 'mkmr/config')
         if path.isfile(xdgpath):
             return xdgpath
+        else:
+            raise ValueError("couldn't find configuration in {}".format(
+                             xdgpath))
 
     homepath = getenv("HOME")
-    if homepath is not None:
-        homepath = path.join(homepath, '.mkmr')
-        if path.isfile(homepath):
-            return homepath
+    if homepath is None:
+        raise ValueError("Neither XDG_CONFIG_HOME or HOME are set, please "
+                         "set XDG_CONFIG_HOME and place the file in mkmr/"
+                         "config relative to it")
 
-    raise ValueError("couldn't find configuration file in {} or {}".format(
-                     xdgpath, homepath))
+    if xdgpath is None:
+        xdgpath = path.join(homepath, '.config/mkmr/config')
+        if path.isfile(xdgpath):
+            return xdgpath
+        else:
+            raise ValueError("couldn't find configuration file in {}".format(
+                             xdgpath))
