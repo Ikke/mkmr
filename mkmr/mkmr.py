@@ -198,7 +198,7 @@ def main():
         source_branch = repo.active_branch.name
 
     # Enable alpine-specific features
-    if "gitlab.alpinelinux.org" in upstream.host:
+    if "gitlab.alpinelinux.org" in gl.url:
         alpine = True
         alpine_prefix = alpine_stable_prefix(source_branch)
     else:
@@ -292,7 +292,7 @@ def main():
         description = editor.edit(contents=description).decode('utf-8')
 
     if options.yes is False or options.dry_run is True:
-        print("GitLab Instance:", upstream.host)
+        print("GitLab Instance:", gl.url)
         print("Source Project:", (origin.user + '/' + origin.project))
         print("Target Project:", (upstream.user + '/' + upstream.project))
         print("Source Branch:", source_branch)
