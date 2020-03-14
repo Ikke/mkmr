@@ -23,7 +23,7 @@ def alpine_stable_prefix(str: str) -> str:
 
 
 def main():
-    parser = OptionParser(version="0.0.4")
+    parser = OptionParser(version="0.0.5")
     parser.add_option("--token",
                       dest="token",
                       action="store",
