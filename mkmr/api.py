@@ -49,9 +49,18 @@ class API():
         Try to get cached project id
         """
         from pathlib import Path
-        import os
+        from os import getenv
         cachefile = Path(self.uri.replace("https://",  "").replace("/", "."))
-        cachedir = Path(os.environ.get('XDG_CACHE_HOME') + '/mkmr')
+        cachepath = getenv('XDG_CACHE_HOME')
+        if cachepath is None:
+            cachepath = getenv('HOME')
+            if cachepath is None:
+                raise ValueError("Neither XDG_CONFIG_HOME or HOME are set, "
+                                 "please set XDG_CACHE_HOME")
+            else:
+                cachepath = cachepath + '/.cache'
+
+        cachedir = Path(cachepath + '/mkmr')
 
         cachepath = cachedir / cachefile
 
