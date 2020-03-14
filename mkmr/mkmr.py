@@ -1,6 +1,7 @@
 from optparse import OptionParser
 from mkmr.api import API
 from git import Repo
+from configparser import SafeConfigParser
 import inquirer
 import editor
 import gitlab
@@ -131,6 +132,53 @@ def main():
     origin = API(repo, options.origin)
     upstream = API(repo, options.upstream)
 
+    # Get the host from upstream and remove the https://
+    # the case for alpine linux, https://gitlab.alpinelinux.org
+    # will be reduced to gitlab.alpinelinux.org
+    #
+    # Do note that it does not matter if we use upstream.host
+    # or origin.host since gitlab is not federated, so both will
+    # call the same server
+    section = upstream.host.replace("https://", "")
+
+    # Try to find the config, it checks XDG_CONFIG_HOME/mkmr/config
+    # then HOME/.mkmr, and will quit otherwise
+    config = find_config()
+
+    parser = SafeConfigParser()
+    parser.read(config)
+
+    if parser.has_section(section) is False:
+        s = (
+            "Section " + section + " has not been found. Please add the "
+            "section along with an private_token option.\nIf you don't "
+            "have a private_token, go to: "
+            "https://<GITLAB_HOST>/profile/personal_access_tokens\n"
+            "And make one for yourself, this is ABSOLUTELY required"
+            )
+        print(s)
+        sys.exit(1)
+
+    # In case the 'url' options is not set in the section we are looking for
+    # then just write it out.
+    if parser.has_option(section, "url") is False:
+        parser[section]['url'] = upstream.host
+        with open(config, 'w') as c:
+            parser.write(c)
+
+    if parser.has_option(section, "private_token") is False:
+        s = (
+            "Option private_token inside section " + section + " has not "
+            "been found. Please fill with with your personal acess token.\n\n"
+            "If you don't have an personal access token, go to: "
+            "https://<GITLAB_HOST>/profile/personal_access_tokens\n"
+            "And make one for yourself, this is ABSOLUTELY required"
+            )
+        print(s)
+        sys.exit(1)
+
+    gl = gitlab.Gitlab.from_config(section, config)
+
     if options.source is not None:
         source_branch = options.source
     else:
@@ -259,10 +307,6 @@ def main():
 
     if choice is False:
         sys.exit(0)
-
-    # Using upstream.host or origin.host here is irrelevant since we don't have
-    # a federated GitLab, hosts only talk to themselves
-    gl = gitlab.Gitlab(upstream.host, private_token=options.token)
 
     origin_project = gl.projects.get(origin.projectid,
                                      retry_transient_errors=True)
