@@ -305,15 +305,17 @@ def main():
     if choice is False:
         sys.exit(0)
 
-    origin_project = gl.projects.get(origin.projectid,
+    origin_project = gl.projects.get(origin.projectid(token=gl.private_token),
                                      retry_transient_errors=True)
+
+    upj = upstream.projectid(token=gl.private_token)
 
     mr = origin_project.mergerequests.create({
                                              'source_branch': source_branch,
                                              'target_branch': target_branch,
                                              'title': title,
                                              'description': description,
-                                             'target_project_id': upstream.projectid,
+                                             'target_project_id': upj,
                                              'labels': labels
                                              },
                                              retry_transient_errors=True)
