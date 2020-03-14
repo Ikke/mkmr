@@ -1,7 +1,7 @@
 from setuptools import setup
 
 __author__ = 'Leo'
-__version__ = '0.0.2'
+__version__ = '0.0.3'
 __contact__ = 'thinkabit.ukim@gmail.com'
 __url__ = 'https://github.com/maxice8/mkmr'
 __license__ = 'GPL-3.0-or-later'
