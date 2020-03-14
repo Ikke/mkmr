@@ -5,6 +5,7 @@ import inquirer
 import editor
 import gitlab
 import sys
+import os
 
 
 def alpine_stable_prefix(str: str) -> str:
@@ -18,6 +19,22 @@ def alpine_stable_prefix(str: str) -> str:
         return "3.11"
     else:
         return None
+
+
+def find_config() -> os.Path:
+    path = os.getenv("XDG_CONFIG_HOME")
+    if path is not None:
+        path = os.path.join(path, '/mkmr/config')
+        if os.path.isfile(path):
+            return path
+
+    path = os.getenv("HOME")
+    if path is not None:
+        path = os.path.join(path, '/.mkmr')
+        if os.path.isfile(path):
+            return path
+
+    raise ValueError("couldn't find configuration file")
 
 
 def main():
