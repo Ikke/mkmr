@@ -32,7 +32,8 @@ def main():
                       "private_token in your configuration file, this one "
                       "will be writen there, if there isn't one it will "
                       "merely override it")
-    parser.add_option("--config",
+    parser.add_option("-c",
+                      "--config",
                       dest="config",
                       action="store",
                       type="string",
