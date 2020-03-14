@@ -18,8 +18,8 @@ mkmr uses INI-formatted files and re-uses the same ones from python-gitlab, in f
 
 The locations searched are:
 
-- $XDG_CONFIG_HOME/mkmr/config
-- $HOME/.mkmr
+- $XDG_CONFIG_HOME/mkmr/config (it will error out instead of looking at the one below)
+- $HOME/.config/mkmr/config (if XDG_CONFIG_HOME is not set)
 
 The --config switch can be used to pass a full path to a configuration file like so:
 
