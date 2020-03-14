@@ -157,15 +157,23 @@ def main():
             parser.write(c)
 
     if parser.has_option(section, "private_token") is False:
-        s = (
-            "Option private_token inside section " + section + " has not "
-            "been found. Please fill with with your personal acess token.\n\n"
-            "If you don't have an personal access token, go to: "
-            "https://<GITLAB_HOST>/profile/personal_access_tokens\n"
-            "And make one for yourself, this is ABSOLUTELY required"
-            )
-        print(s)
-        sys.exit(1)
+        # If --token is not passed to us then drop out with a long useful
+        # message, if it is passed to us write it out in the configuration
+        # file
+        if options.token is None:
+            s = (
+                "Option private_token inside section " + section + " has not "
+                "been found. Please fill with with your personal access "
+                "token.\n If you don't have an personal access token, go to: "
+                "https://<GITLAB_HOST>/profile/personal_access_tokens\n"
+                "And make one for yourself, this is ABSOLUTELY required"
+                )
+            print(s)
+            sys.exit(1)
+        else:
+            parser[section]['private_token'] = options.token
+            with open(config, 'w') as c:
+                parser.write(c)
 
     gl = gitlab.Gitlab.from_config(section, config)
 
