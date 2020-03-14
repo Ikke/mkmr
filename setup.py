@@ -6,7 +6,7 @@ with open(path.join(this_directory, 'README.md'), encoding='utf-8') as f:
     long_description = f.read()
 
 __author__ = 'Leo'
-__version__ = '0.0.3'
+__version__ = '0.0.4'
 __contact__ = 'thinkabit.ukim@gmail.com'
 __url__ = 'https://github.com/maxice8/mkmr'
 __license__ = 'GPL-3.0-or-later'
