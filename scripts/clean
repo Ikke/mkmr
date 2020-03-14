@@ -1,0 +1,2 @@
+#!/bin/sh
+rm -rf -v __pycache__ dist build mkmr.egg-info 2>/dev/null
