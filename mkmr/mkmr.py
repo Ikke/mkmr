@@ -21,7 +21,7 @@ def alpine_stable_prefix(str: str) -> str:
         return None
 
 
-def find_config() -> os.Path:
+def find_config() -> os.path:
     path = os.getenv("XDG_CONFIG_HOME")
     if path is not None:
         path = os.path.join(path, '/mkmr/config')
