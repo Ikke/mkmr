@@ -4,6 +4,8 @@ Small python3 utility to create Merge Requests on GitLab, with special support f
 
 ## Installation
 
+Unless you need the absolutely newest version immediately please use a system package.
+
 This package is available in the testing repo of Alpine Linux
 
 ```
@@ -24,17 +26,3 @@ The --config switch can be used to pass a full path to a configuration file like
 ```sh
 $ mkmr --config=/tmp/config
 ```
-
-## Dependencies
-
-The packages for Alpine Linux, please check the equivalents for your distribution:
-
-* py3-gitpython
-* py3-urllib
-* py3-gitlab
-* py3-python-editor
-* py3-inquirer
-
-## License
-
-mkmr is licensed under 'GPL-3.0-or-later', see COPYING
