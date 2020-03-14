@@ -114,16 +114,6 @@ def main():
 
     (options, args) = parser.parse_args(sys.argv)
 
-    if options.token is None:
-        s = (
-            "Please pass your GitLab Personal Access Token with --token\n"
-            "If you don't have one, go to: "
-            "https://<GITLAB_HOST>/profile/personal_access_tokens\n"
-            "And make one for yourself, this is ABSOLUTELY required"
-            )
-        print(s)
-        sys.exit(1)
-
     # Initialize our repo object based on the local repo we have
     repo = Repo()
 
