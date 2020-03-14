@@ -106,6 +106,13 @@ def main():
                            "rebasing on top of the target branch, so some "
                            "results, like how many commits there are between "
                            "your branch and upstream, may be innacurate")
+    parser.add_option("--section",
+                      dest="section",
+                      action="store",
+                      default=None,
+                      type="string",
+                      help="section of the configuration file to look for "
+                      "the private_token and url")
 
     (options, args) = parser.parse_args(sys.argv)
 
@@ -117,14 +124,17 @@ def main():
     origin = API(repo, options.origin)
     upstream = API(repo, options.upstream)
 
-    # Get the host from upstream and remove the https://
-    # the case for alpine linux, https://gitlab.alpinelinux.org
-    # will be reduced to gitlab.alpinelinux.org
-    #
-    # Do note that it does not matter if we use upstream.host
-    # or origin.host since gitlab is not federated, so both will
-    # call the same server
-    section = upstream.host.replace("https://", "")
+    if options.section is None:
+        # Get the host from upstream and remove the https://
+        # the case for alpine linux, https://gitlab.alpinelinux.org
+        # will be reduced to gitlab.alpinelinux.org
+        #
+        # Do note that it does not matter if we use upstream.host
+        # or origin.host since gitlab is not federated, so both will
+        # call the same server
+        section = upstream.host.replace("https://", "")
+    else:
+        section = options.section
 
     # Try to find the config, it checks XDG_CONFIG_HOME/mkmr/config
     # then HOME/.mkmr, and will quit otherwise
