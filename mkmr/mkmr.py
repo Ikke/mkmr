@@ -89,7 +89,8 @@ def main():
                       action="store",
                       type="string",
                       help="title of the merge request")
-    parser.add_option("--edit",
+    parser.add_option("-e",
+                      "--edit",
                       dest="edit",
                       action="store_true",
                       default=False,
@@ -105,7 +106,8 @@ def main():
                       type="string",
                       help="comma separated list of labels for the merge "
                            "request")
-    parser.add_option("--yes",
+    parser.add_option("-y",
+                      "--yes",
                       dest="yes",
                       action="store_true",
                       default=False,
@@ -117,7 +119,8 @@ def main():
                       default=None,
                       type="int",
                       help="Set timeout for making calls to the gitlab API")
-    parser.add_option("--dry-run",
+    parser.add_option("-n",
+                      "--dry-run",
                       dest="dry_run",
                       action="store_true",
                       default=False,
