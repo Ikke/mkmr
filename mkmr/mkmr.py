@@ -154,7 +154,7 @@ def main():
                 "Option private_token inside section " + section + " has not "
                 "been found. Please fill with with your personal access "
                 "token.\n If you don't have an personal access token, go to: "
-                "https://<GITLAB_HOST>/profile/personal_access_tokens\n"
+                "https://" + section + "/profile/personal_access_tokens\n"
                 "And make one for yourself, this is ABSOLUTELY required"
                 )
             print(s)
