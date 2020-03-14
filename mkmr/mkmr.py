@@ -1,5 +1,6 @@
 from optparse import OptionParser
 from mkmr.api import API
+from mkmr.utils import find_config
 from git import Repo
 from configparser import SafeConfigParser
 import inquirer
@@ -20,30 +21,6 @@ def alpine_stable_prefix(str: str) -> str:
         return "3.11"
     else:
         return None
-
-
-def find_config(path):
-    if path is not None:
-        if os.path.isfile(path):
-            return path
-        else:
-            raise ValueError("couldn't find configuration file in {}".format(
-                             path))
-
-    xdgpath = os.getenv("XDG_CONFIG_HOME")
-    if xdgpath is not None:
-        xdgpath = os.path.join(xdgpath, 'mkmr/config')
-        if os.path.isfile(xdgpath):
-            return xdgpath
-
-    homepath = os.getenv("HOME")
-    if homepath is not None:
-        homepath = os.path.join(homepath, '.mkmr')
-        if os.path.isfile(homepath):
-            return homepath
-
-    raise ValueError("couldn't find configuration file in {} or {}".format(
-                     xdgpath, homepath))
 
 
 def main():
