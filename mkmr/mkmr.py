@@ -61,7 +61,7 @@ def main():
                       action="store",
                       type="string",
                       default=None,
-                      help="Location of the configuration file to read from")
+                      help="Full path to configuration file")
     parser.add_option("--target",
                       dest="target",
                       action="store",
