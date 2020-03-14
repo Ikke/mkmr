@@ -7,7 +7,6 @@ import inquirer
 import editor
 import gitlab
 import sys
-import os
 
 
 def alpine_stable_prefix(str: str) -> str:
