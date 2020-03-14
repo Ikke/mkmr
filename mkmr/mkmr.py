@@ -177,6 +177,11 @@ def main():
 
     gl = gitlab.Gitlab.from_config(section, config)
 
+    # If the user passed --token to us then override the token acquired
+    # from private_token
+    if options.token is not None:
+        gl.private_token = options.token
+
     if options.source is not None:
         source_branch = options.source
     else:
