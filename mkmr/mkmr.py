@@ -163,7 +163,7 @@ def main():
             with open(config, 'w') as c:
                 parser.write(c)
 
-    gl = gitlab.Gitlab.from_config(section, config)
+    gl = gitlab.Gitlab.from_config(section, [config])
 
     # If the user passed --token to us then override the token acquired
     # from private_token
