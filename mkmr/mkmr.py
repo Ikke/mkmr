@@ -133,15 +133,9 @@ def main():
     parser.read(config)
 
     if parser.has_section(section) is False:
-        s = (
-            "Section " + section + " has not been found. Please add the "
-            "section along with an private_token option.\nIf you don't "
-            "have a private_token, go to: "
-            "https://<GITLAB_HOST>/profile/personal_access_tokens\n"
-            "And make one for yourself, this is ABSOLUTELY required"
-            )
-        print(s)
-        sys.exit(1)
+        parser.add_section(section)
+        with open(config, 'w') as c:
+            parser.write(c)
 
     # In case the 'url' options is not set in the section we are looking for
     # then just write it out.
