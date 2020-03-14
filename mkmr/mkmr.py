@@ -111,10 +111,9 @@ def main():
     parser.add_option("--timeout",
                       dest="timeout",
                       action="store",
-                      default=4,
+                      default=None,
                       type="int",
-                      help="Set timeout for gitlab call to make a merge "
-                      "request")
+                      help="Set timeout for making calls to the gitlab API")
     parser.add_option("--dry-run",
                       dest="dry_run",
                       action="store_true",
@@ -194,6 +193,11 @@ def main():
     # from private_token
     if options.token is not None:
         gl.private_token = options.token
+
+    # If the user passed --timeout to us then override the token acquired
+    # from timeout or the default value
+    if options.timeout is not None:
+        gl.timeout = options.timeout
 
     if options.source is not None:
         source_branch = options.source
@@ -335,8 +339,7 @@ def main():
                                              'target_project_id': upstream.projectid,
                                              'labels': labels
                                              },
-                                             retry_transient_errors=True,
-                                             timeout=options.timeout)
+                                             retry_transient_errors=True)
 
     print("id:", mr.attributes['iid'])
     print("title:", mr.attributes['title'])
