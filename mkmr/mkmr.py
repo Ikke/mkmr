@@ -22,19 +22,20 @@ def alpine_stable_prefix(str: str) -> str:
 
 
 def find_config() -> os.path:
-    path = os.getenv("XDG_CONFIG_HOME")
-    if path is not None:
-        path = os.path.join(path, '/mkmr/config')
-        if os.path.isfile(path):
-            return path
+    xdgpath = os.getenv("XDG_CONFIG_HOME")
+    if xdgpath is not None:
+        xdgpath = os.path.join(xdgpath, 'mkmr/config')
+        if os.path.isfile(xdgpath):
+            return xdgpath
 
-    path = os.getenv("HOME")
-    if path is not None:
-        path = os.path.join(path, '/.mkmr')
-        if os.path.isfile(path):
-            return path
+    homepath = os.getenv("HOME")
+    if homepath is not None:
+        homepath = os.path.join(homepath, '.mkmr')
+        if os.path.isfile(homepath):
+            return homepath
 
-    raise ValueError("couldn't find configuration file")
+    raise ValueError("couldn't find configuration file in {} or {}".format(
+                     xdgpath, homepath))
 
 
 def main():
