@@ -18,6 +18,7 @@ setup(name='mkmr',
       platforms='any',
       classifiers=[
           'Topic :: Utilities',
+          'Topic :: Software Development :: Version Control :: Git',
           'Intended Audience :: Developers',
           'License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)',
           'Development Status :: 2 - Pre-Alpha',
