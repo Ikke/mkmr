@@ -19,7 +19,7 @@ setup(name='mkmr',
       classifiers=[
           'Topic :: Utilities',
           'Intended Audience :: Developers',
-          'License :: OSI Approved :: GPL-3.0-or-later',
+          'License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)',
           'Development Status :: 2 - Pre-Alpha',
           'Programming Language :: Python :: 3',
           'Programming Language :: Python :: 3.8',
