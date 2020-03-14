@@ -76,6 +76,13 @@ def main():
                       default=False,
                       help="Don't prompt for user confirmation before making "
                            "merge request")
+    parser.add_option("--timeout",
+                      dest="timeout",
+                      action="store",
+                      default=4,
+                      type="int",
+                      help="Set timeout for gitlab call to make a merge "
+                      "request")
     parser.add_option("--dry-run",
                       dest="dry_run",
                       action="store_true",
@@ -250,7 +257,8 @@ def main():
                                              'target_project_id': upstream.projectid,
                                              'labels': labels
                                              },
-                                             retry_transient_errors=True)
+                                             retry_transient_errors=True,
+                                             timeout=options.timeout)
 
     print("id:", mr.attributes['iid'])
     print("title:", mr.attributes['title'])
