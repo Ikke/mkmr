@@ -52,7 +52,10 @@ def main():
                       dest="token",
                       action="store",
                       type="string",
-                      help="GitLab Personal Access Token")
+                      help="GitLab Personal Access Token, if there is no "
+                      "private_token in your configuration file, this one "
+                      "will be writen there, if there isn't one it will "
+                      "merely override it")
     parser.add_option("--config",
                       dest="config",
                       action="store",
