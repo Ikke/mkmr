@@ -53,6 +53,12 @@ def main():
                       action="store",
                       type="string",
                       help="GitLab Personal Access Token")
+    parser.add_option("--config",
+                      dest="config",
+                      action="store",
+                      type="string",
+                      default=None,
+                      help="Location of the configuration file to read from")
     parser.add_option("--target",
                       dest="target",
                       action="store",
@@ -140,7 +146,7 @@ def main():
 
     # Try to find the config, it checks XDG_CONFIG_HOME/mkmr/config
     # then HOME/.mkmr, and will quit otherwise
-    config = find_config()
+    config = find_config(options.config)
 
     parser = SafeConfigParser()
     parser.read(config)
