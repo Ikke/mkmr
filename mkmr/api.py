@@ -40,11 +40,7 @@ class API():
 
         self.host = 'https://' + uri[2]
 
-        # Initialize the value of self.projectid, it will use the cache
-        # whenever possible
-        self.projectid = self.projectid()
-
-    def projectid(self) -> int:
+    def projectid(self, token=None) -> int:
         """
         Try to get cached project id
         """
@@ -65,7 +61,8 @@ class API():
         cachepath = cachedir / cachefile
 
         if cachepath.is_file():
-            return int(cachepath.read_text())
+            self.projectid = int(cachepath.read_text())
+            return self.projectid
 
         if not cachedir.exists():
             cachedir.mkdir(parents=True)
@@ -76,11 +73,14 @@ class API():
         """
         Call into the gitlab API to get the project id
         """
-        import urllib.request
-        import urllib.parse
+        from urllib.request import Request, urlopen
         import json
 
-        f = urllib.request.urlopen(self.endpoint).read()
+        req = Request(self.endpoint)
+        if token is not None:
+            req.add_header('Private-Token', token)
+        f = urlopen(req).read()
         j = json.loads(f.decode('utf-8'))
         cachepath.write_text(str(j['id']))
-        return j['id']
+        self.projectid = j['id']
+        return self.projectid
