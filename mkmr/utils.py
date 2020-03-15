@@ -5,7 +5,7 @@ def create_dir(path: Path) -> Path:
     if path.exists() and not path.is_dir():
         path.unlink()
 
-    path.mkdir(mode=0o700, parents=True, exists_ok=True)
+    path.mkdir(mode=0o700, parents=True, exist_ok=True)
     return path
 
 
