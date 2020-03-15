@@ -106,8 +106,19 @@ def main():
                            "rebasing on top of the target branch, so some "
                            "results, like how many commits there are between "
                            "your branch and upstream, may be innacurate")
+    parser.add_option("--overwrite",
+                      dest="overwrite",
+                      action="store_true",
+                      default=False,
+                      help="if --token is passed, overwrite private_token in "
+                      "configuration file")
 
     (options, args) = parser.parse_args(sys.argv)
+
+    if options.token is None and options.overwrite is True:
+        print("--overwrite was passed, but no --token was passed along with "
+              "it.")
+        sys.exit(1)
 
     # Initialize our repo object based on the local repo we have
     repo = Repo()
@@ -145,7 +156,8 @@ def main():
         with open(config, 'w') as c:
             parser.write(c)
 
-    if parser.has_option(section, "private_token") is False:
+    if parser.has_option(section, "private_token") is False or (
+       options.overwrite is True):
         # If --token is not passed to us then drop out with a long useful
         # message, if it is passed to us write it out in the configuration
         # file
