@@ -162,10 +162,9 @@ def main():
         if options.token is None:
             s = (
                 "Option private_token inside section " + section + " has not "
-                "been found. Please fill with with your personal access "
-                "token.\n If you don't have an personal access token, go to: "
-                "https://" + section + "/profile/personal_access_tokens\n"
-                "And make one for yourself, this is ABSOLUTELY required"
+                "been found. Please generate a personal access token from: "
+                "https://" + section + "/profile/personal_access_tokens and "
+                "pass it to mkmr with the --token switch"
                 )
             print(s)
             sys.exit(1)
