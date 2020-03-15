@@ -1,4 +1,5 @@
 from git import Repo
+from mkmr.utils import create_dir
 
 
 class API():
@@ -47,28 +48,23 @@ class API():
         from pathlib import Path
         from os import getenv
         cachefile = Path(self.uri.replace("https://",  "").replace("/", "."))
-        cachepath = getenv('XDG_CACHE_HOME')
-        if cachepath is None:
-            cachepath = getenv('HOME')
-            if cachepath is None:
+
+        cachedir = getenv('XDG_CACHE_HOME')
+        if cachedir is not None:
+            cachedir = create_dir(Path(cachedir, 'mkmr'))
+        else:
+            homepath = getenv('HOME')
+            if homepath is None:
                 raise ValueError("Neither XDG_CONFIG_HOME or HOME are set, "
                                  "please set XDG_CACHE_HOME")
             else:
-                cachepath = cachepath + '/.cache'
+                cachedir = create_dir(Path(homepath, '.cache'))
 
-        cachedir = Path(cachepath + '/mkmr')
-
-        cachepath = cachedir / cachefile
+        cachepath = Path(cachedir / cachefile)
 
         if cachepath.is_file():
             self.projectid = int(cachepath.read_text())
             return self.projectid
-
-        if not cachedir.exists():
-            cachedir.mkdir(parents=True)
-        else:
-            if not cachedir.is_dir():
-                cachedir.unlink()
 
         """
         Call into the gitlab API to get the project id
