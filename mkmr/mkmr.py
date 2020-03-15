@@ -137,8 +137,6 @@ def main():
     # call the same server
     section = upstream.host.replace("https://", "")
 
-    # Try to find the config, it checks XDG_CONFIG_HOME/mkmr/config
-    # then HOME/.mkmr, and will quit otherwise
     config = find_config(options.config)
 
     parser = SafeConfigParser()
