@@ -1,27 +1,27 @@
 from pathlib import Path
 
 
-def create_config(xdgpath: Path) -> Path:
+def create_dir(path: Path) -> Path:
+    if path.exists() and not path.is_dir():
+        path.unlink()
+
+    path.mkdir(mode=0o700, parents=True, exists_ok=True)
+    return path
+
+
+def create_file(path: Path) -> Path:
     # Get the parent
-    p = xdgpath.parent
-
-    # If the parent exists and is not a directory
-    # remove it, we need it to be a directory
-    if p.exists() and not p.is_dir():
-        p.unlink()
-
-    # Create parent directions of the parent directory
-    p.mkdir(parents=True, exist_ok=True)
+    create_dir(path.parent)
 
     # If the file exists but is not a file then remove
     # it is as well
-    if xdgpath.exists() and not xdgpath.is_file():
-        xdgpath.unlink()
+    if path.exists() and not path.is_file():
+        path.unlink()
 
     # Create it with nice permissions for a file that
     # hold secrets
-    xdgpath.touch(mode=0o600)
-    return xdgpath
+    path.touch(mode=0o600)
+    return path
 
 
 def find_config(p):
