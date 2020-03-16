@@ -25,6 +25,7 @@ classifiers=[
     "Programming Language :: Python :: 3.8",
 	"Operating System :: POSIX",
 ]
+license = "GPL-3.0-or-later"
 
 [tool.flit.scripts]
 mkmr = "mkmr.mkmr:main"
