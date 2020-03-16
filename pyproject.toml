@@ -30,6 +30,10 @@ license = "GPL-3.0-or-later"
 [tool.flit.scripts]
 mkmr = "mkmr.mkmr:main"
 
+[tool.flit.sdist]
+include = ["mkmr/"]
+exclude = ["scripts/", "mkmr/__pycache__", ".gitignore", "COPYING"]
+
 [tool.black]
 line-length = 100
 target_version = ['py38']
