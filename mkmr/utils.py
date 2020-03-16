@@ -31,19 +31,19 @@ def find_config(p):
         if p.is_file():
             return p
         else:
-            raise ValueError("couldn't find configuration file in {}".format(
-                             p))
+            raise ValueError("couldn't find configuration file in {}".format(p))
 
     xdgpath = getenv("XDG_CONFIG_HOME")
     if xdgpath is not None:
         xdgpath = Path(xdgpath)
-        return create_file(xdgpath / 'mkmr' / 'config')
+        return create_file(xdgpath / "mkmr" / "config")
 
     homepath = getenv("HOME")
     if homepath is None:
-        raise ValueError("Neither XDG_CONFIG_HOME or HOME are set, please "
-                         "set XDG_CONFIG_HOME")
+        raise ValueError(
+            "Neither XDG_CONFIG_HOME or HOME are set, please set XDG_CONFIG_HOME"
+        )
 
     if xdgpath is None:
         xdgpath = Path(homepath)
-        return create_file(xdgpath / '.config' / 'mkmr' / 'config')
+        return create_file(xdgpath / ".config" / "mkmr" / "config")
