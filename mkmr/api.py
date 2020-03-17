@@ -60,8 +60,7 @@ class API:
             homepath = getenv("HOME")
             if homepath is None:
                 raise ValueError(
-                    "Neither XDG_CONFIG_HOME or HOME are set, "
-                    "please set XDG_CACHE_HOME"
+                    "Neither XDG_CONFIG_HOME or HOME are set, please set XDG_CACHE_HOME"
                 )
             else:
                 cachedir = create_dir(Path(homepath, ".cache"))
