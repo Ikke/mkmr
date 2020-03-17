@@ -73,7 +73,21 @@ Eventually you want to rotate your personal access tokens, in that case you can
 combine the `--token=TOKEN` and `--overwrite` options. Usage of the latter means
 the configuration file will have its `private_token` overwritten.
 
-<code>mkmr --token=FOO --overwrite</code>
+<code>cat $XDG_CONFIG_HOME/mkmr/config</code>  
+```ini
+[gitlab.alpinelinux.org]
+url = https://gitlab.alpinelinux.org
+private_token = BAR
+```
+
+<code>mkmr --token=FOO --overwrite</code>  
+
+<code>cat $XDG_CONFIG_HOME/mkmr/config</code>  
+```ini
+[gitlab.alpinelinux.org]
+url = https://gitlab.alpinelinux.org
+private_token = FOO
+```
 
 ## Configuration
 
