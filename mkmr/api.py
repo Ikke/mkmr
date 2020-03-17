@@ -27,6 +27,8 @@ class API:
         """
         if self.uri.startswith("git@"):
             self.uri = self.uri.replace(":", "/").replace("git@", "https://")
+        elif self.uri.startswith("ssh://git@"):
+            self.uri = self.uri.replace(":", "/").replace("ssh://git@", "https://")
         if self.uri.endswith(".git"):
             self.uri = self.uri.replace(".git", "")
 
