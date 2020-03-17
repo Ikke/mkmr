@@ -348,6 +348,7 @@ def main():
             "description": description,
             "target_project_id": upstream.projectid(token=gl.private_token),
             "labels": labels,
+            "allow_maintainer_to_push": True,
         },
         retry_transient_errors=True,
     )
