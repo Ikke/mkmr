@@ -185,14 +185,23 @@ def main():
         # message, if it is passed to us write it out in the configuration
         # file
         if options.token is None:
-            s = (
-                "Option private_token inside section " + section + " has not "
-                "been found. Please generate a personal access token from: "
-                "https://" + section + "/profile/personal_access_tokens and "
-                "pass it to mkmr with the --token switch"
+            token_answer = dict()
+            token_answer["token"] = ""
+            print(
+                "Please visit https://"
+                + section
+                + "/profile/personal_access_tokens to generate your token"
             )
-            print(s)
-            sys.exit(1)
+            while token_answer is not None and token_answer["token"] == "":
+                questions = [inquirer.Text("token", message="personal access token")]
+                token_answer = inquirer.prompt(questions)
+            if token_answer is None:
+                print("personal access token not provided")
+                sys.exit(1)
+            else:
+                parser[section]["private_token"] = token_answer["token"]
+                with open(config, "w") as c:
+                    parser.write(c)
         else:
             parser[section]["private_token"] = options.token
             with open(config, "w") as c:
