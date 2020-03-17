@@ -1,12 +1,14 @@
-from optparse import OptionParser
-from mkmr.api import API
-from mkmr.utils import find_config
-from git import Repo
+import sys
 from configparser import SafeConfigParser
-import inquirer
+from optparse import OptionParser
+
 import editor
 import gitlab
-import sys
+import inquirer
+from git import Repo
+
+from mkmr.api import API
+from mkmr.utils import find_config
 
 
 def alpine_stable_prefix(str: str) -> str:
