@@ -76,11 +76,7 @@ def main():
         help="git remote that points to upstream repo",
     )
     parser.add_option(
-        "--title",
-        dest="title",
-        action="store",
-        type="string",
-        help="title of the merge request",
+        "--title", dest="title", action="store", type="string", help="title of the merge request",
     )
     parser.add_option(
         "-e",
@@ -180,9 +176,7 @@ def main():
         with open(config, "w") as c:
             parser.write(c)
 
-    if parser.has_option(section, "private_token") is False or (
-        options.overwrite is True
-    ):
+    if parser.has_option(section, "private_token") is False or (options.overwrite is True):
         # If --token is not passed to us then drop out with a long useful
         # message, if it is passed to us write it out in the configuration
         # file
@@ -286,10 +280,7 @@ def main():
     else:
         questions = [
             inquirer.List(
-                "commit",
-                message="Please pick a commit",
-                choices=commit_titles,
-                carousel=True,
+                "commit", message="Please pick a commit", choices=commit_titles, carousel=True,
             ),
         ]
         answers = inquirer.prompt(questions)
@@ -340,9 +331,7 @@ def main():
     if options.yes is True:
         choice = True
     else:
-        choice = inquirer.confirm(
-            "Create Merge Request with the values shown above?", default=True
-        )
+        choice = inquirer.confirm("Create Merge Request with the values shown above?", default=True)
 
     if choice is False:
         sys.exit(0)
