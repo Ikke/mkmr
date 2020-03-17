@@ -67,6 +67,14 @@ If you want to add labels to your merge request then use `--labels=LABELS`, the 
 
 <code>mkmr --labels=help-wanted,good-first-issue</code>
 
+### Switching to a new personal access token
+
+Eventually you want to rotate your personal access tokens, in that case you can
+combine the `--token=TOKEN` and `--overwrite` options. Usage of the latter means
+the configuration file will have its `private_token` overwritten.
+
+<code>mkmr --token=FOO --overwrite</code>
+
 ## Configuration
 
 mkmr uses INI-formatted files in the same way as python-gitlab, in fact mkmr will just write a section (like `[gitlab.alpinelinux.org]`) and in it, will write the `private_token` and `url` keys with the relevant values.
