@@ -40,9 +40,7 @@ def find_config(p):
 
     homepath = getenv("HOME")
     if homepath is None:
-        raise ValueError(
-            "Neither XDG_CONFIG_HOME or HOME are set, please set XDG_CONFIG_HOME"
-        )
+        raise ValueError("Neither XDG_CONFIG_HOME or HOME are set, please set XDG_CONFIG_HOME")
 
     if xdgpath is None:
         xdgpath = Path(homepath)
