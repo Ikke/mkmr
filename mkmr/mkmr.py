@@ -135,7 +135,7 @@ def main():
         help="if --token is passed, overwrite private_token in configuration file",
     )
 
-    (options, args) = parser.parse_args(sys.argv)
+    (options, _) = parser.parse_args(sys.argv)
 
     if options.token is None and options.overwrite is True:
         print("--overwrite was passed, but no --token was passed along with it")
