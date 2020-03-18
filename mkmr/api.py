@@ -30,7 +30,7 @@ class API:
         """
         p = parse(self.uri)
 
-        self.host = p.domain
+        self.host = "https://" + p.domain
         try:
             self.user = p.owner
         except AttributeError:
@@ -50,7 +50,7 @@ class API:
 
         self.uri = p.url2https.replace(".git", "")
 
-        self.endpoint = "https://" + self.host + "/api/v4/projects/"
+        self.endpoint = self.host + "/api/v4/projects/"
         self.endpoint = self.endpoint + self.user + "%2F" + self.project
 
     def projectid(self, token=None) -> int:
