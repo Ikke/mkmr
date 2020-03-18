@@ -19,7 +19,11 @@ class API:
         if remote in repo.remotes:
             self.uri = repo.remotes[remote].url
         else:
-            raise ValueError("Remote passed does not exist in repository")
+            raise ValueError(
+                "We were passed the remote '{}' which does not exist in the repository".format(
+                    remote
+                )
+            )
 
         """
         Parse the url with giturlparse and check what values we got from it
