@@ -1,15 +1,13 @@
 import sys
-from configparser import SafeConfigParser
 from optparse import OptionParser
 from typing import Optional
 
 import editor
-import gitlab
 import inquirer
 from git import Repo
 
 from mkmr.api import API
-from mkmr.utils import find_config
+from mkmr.config import Config
 
 
 def alpine_stable_prefix(str: str) -> Optional[str]:
@@ -151,70 +149,9 @@ def main():
     origin = API(repo, options.origin)
     upstream = API(repo, options.upstream)
 
-    # Get the host from upstream and remove the https://
-    # the case for alpine linux, https://gitlab.alpinelinux.org
-    # will be reduced to gitlab.alpinelinux.org
-    #
-    # Do note that it does not matter if we use upstream.host
-    # or origin.host since gitlab is not federated, so both will
-    # call the same server
-    section = upstream.host.replace("https://", "")
-
-    config = find_config(options.config)
-
-    parser = SafeConfigParser()
-    parser.read(config)
-
-    if parser.has_section(section) is False:
-        parser.add_section(section)
-        with open(config, "w") as c:
-            parser.write(c)
-
-    # In case the 'url' options is not set in the section we are looking for
-    # then just write it out.
-    if parser.has_option(section, "url") is False:
-        parser[section]["url"] = upstream.host
-        with open(config, "w") as c:
-            parser.write(c)
-
-    if parser.has_option(section, "private_token") is False or (options.overwrite is True):
-        # If --token is not passed to us then drop out with a long useful
-        # message, if it is passed to us write it out in the configuration
-        # file
-        if options.token is None:
-            token_answer = dict()
-            token_answer["token"] = ""
-            print(
-                "Please visit https://"
-                + section
-                + "/profile/personal_access_tokens to generate your token"
-            )
-            while token_answer is not None and token_answer["token"] == "":
-                questions = [inquirer.Text("token", message="personal access token")]
-                token_answer = inquirer.prompt(questions)
-            if token_answer is None:
-                print("personal access token not provided")
-                sys.exit(1)
-            else:
-                parser[section]["private_token"] = token_answer["token"]
-                with open(config, "w") as c:
-                    parser.write(c)
-        else:
-            parser[section]["private_token"] = options.token
-            with open(config, "w") as c:
-                parser.write(c)
-
-    gl = gitlab.Gitlab.from_config(section, [config])
-
-    # If the user passed --token to us then override the token acquired
-    # from private_token
-    if options.token is not None:
-        gl.private_token = options.token
-
-    # If the user passed --timeout to us then override the token acquired
-    # from timeout or the default value
-    if options.timeout is not None:
-        gl.timeout = options.timeout
+    config = Config(options, upstream.host)
+    config.write_config(upstream)
+    gl = config.get_gitlab()
 
     if options.source is not None:
         source_branch = options.source
