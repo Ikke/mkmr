@@ -28,7 +28,7 @@ upstream	https://gitlab.alpinelinux.org/alpine/aports.git (fetch)
 upstream	git@gitlab.alpinelinux.org:alpine/aports.git (push)
 </pre>
 
-Note that the fetch URL will be used for all interactions, and in fact only https:// are supported, with ssh:// being silently converted to https://.
+Note that the fetch URL will be used for all interactions, and in fact only https:// are supported, with other ssh URL types like ssh:// and git:// being silently converted to https://.
 
 3. (first-time users) call the script with `--token=TOKEN`, it will be written automatically to the configuration and won't be necessary in any further usage.
 
