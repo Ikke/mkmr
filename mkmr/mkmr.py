@@ -1,6 +1,7 @@
 import sys
 from configparser import SafeConfigParser
 from optparse import OptionParser
+from typing import Optional
 
 import editor
 import gitlab
@@ -11,7 +12,7 @@ from mkmr.api import API
 from mkmr.utils import find_config
 
 
-def alpine_stable_prefix(str: str) -> str:
+def alpine_stable_prefix(str: str) -> Optional[str]:
     if str.startswith("3.8-"):
         return "3.8"
     elif str.startswith("3.9-"):
