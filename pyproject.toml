@@ -12,6 +12,7 @@ requires = [
     "python-gitlab>=2.0.0,<3",
     "python-editor>=1.0.0,<2",
     "inquirer>=2.6.0,<3",
+    "giturlparse>=0.9.0,<1",
 ]
 requires-python=">=3.8"
 description-file="README.md"
