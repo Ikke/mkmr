@@ -1,4 +1,5 @@
 from git import Repo
+from giturlparse import parse
 
 from mkmr.utils import create_dir
 
@@ -21,28 +22,32 @@ class API:
             raise ValueError("Remote passed does not exist in repository")
 
         """
-        if we have https:// then just apply it, if we have ssh then
-        try to convert it to https://, if we have any other then raise
-        a ValueError
+        Parse the url with giturlparse and check what values we got from it
         """
-        if self.uri.startswith("git@"):
-            self.uri = self.uri.replace(":", "/").replace("git@", "https://")
-        elif self.uri.startswith("ssh://git@"):
-            self.uri = self.uri.replace(":", "/").replace("ssh://git@", "https://")
-        if self.uri.endswith(".git"):
-            self.uri = self.uri.replace(".git", "")
+        p = parse(self.uri)
 
-        uri = self.uri.split("/")
-        if len(uri) < 5:
-            raise ValueError("uri passed must contain owner and repository")
+        self.host = p.domain
+        try:
+            self.user = p.owner
+        except AttributeError:
+            raise AttributeError(
+                "url from remote '{}' has no component owner in its url: '{}'".format(
+                    remote, self.uri
+                )
+            )
+        try:
+            self.project = p.repo
+        except AttributeError:
+            raise AttributeError(
+                "url from remote '{}' has no repo component in its url: '{}'".format(
+                    remote, self.uri
+                )
+            )
 
-        self.endpoint = "https://" + uri[2] + "/api/v4/projects/"
-        self.endpoint = self.endpoint + uri[3] + "%2F" + uri[4]
+        self.uri = p.url2https.replace(".git", "")
 
-        self.user = uri[3]
-        self.project = uri[4]
-
-        self.host = "https://" + uri[2]
+        self.endpoint = "https://" + self.host + "/api/v4/projects/"
+        self.endpoint = self.endpoint + self.user + "%2F" + self.project
 
     def projectid(self, token=None) -> int:
         """
