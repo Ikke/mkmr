@@ -14,7 +14,7 @@ class Config:
 
     def __init__(self, options, gitlab_host):
         self.options = options
-        self.config = find_config(options.config)
+        self.config = find_config(self.options.config)
         # Get the host from upstream and remove the https://
         # the case for alpine linux, https://gitlab.alpinelinux.org
         # will be reduced to gitlab.alpinelinux.org
