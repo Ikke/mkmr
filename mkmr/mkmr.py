@@ -153,7 +153,6 @@ def main():
 
     try:
         config = Config(options, upstream.host)
-        config.write_config()
     except ValueError as e:
         print(e)
         sys.exit(1)
