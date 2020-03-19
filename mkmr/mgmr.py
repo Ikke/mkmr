@@ -219,7 +219,7 @@ def main():
             queue[k] = "merged"
             n += 1
 
-    print(dumps(queue))
+    print(dumps(queue, indent=4))
 
 
 if __name__ == "__main__":
