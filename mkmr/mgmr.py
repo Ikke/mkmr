@@ -102,7 +102,9 @@ def main():
 
     gl = config.get_gitlab()
 
-    project = gl.projects.get(remote.projectid(token=gl.private_token), retry_transient_errors=True)
+    project = gl.projects.get(
+        remote.projectid(token=gl.private_token), retry_transient_errors=True, lazy=True
+    )
 
     """
     Create a dictionary that is our queue of merge requests to work on, they have the following
