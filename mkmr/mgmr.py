@@ -68,6 +68,14 @@ def main():
         default="upstream",
         help="which remote from which to operate on",
     )
+    parser.add_option(
+        "-q",
+        "--quiet",
+        dest="quiet",
+        action="store_true",
+        default=False,
+        help="Print only the json with the results or in case of an unrecoverable error",
+    )
 
     (options, args) = parser.parse_args(sys.argv)
 
@@ -78,6 +86,8 @@ def main():
     if options.token is None and options.overwrite is True:
         print("--overwrite was passed, but no --token was passed along with it")
         sys.exit(1)
+
+    quiet = options.quiet
 
     # Initialize our repo object based on the local repo we have
     repo = Repo()
@@ -164,29 +174,31 @@ def main():
 
         attrs = mr.attributes
         if attrs["state"] == "merged":
-            print(k, "is already merged")
+            print(k, "is already merged") if not quiet else 0
             queue[k] = "Merge: already merged"
             n += 1
             continue
         elif attrs["state"] == "closed":
-            print(k, "is closed")
+            print(k, "is closed") if not quiet else 0
             queue[k] = "Merge: closed"
             n += 1
             continue
         elif attrs["work_in_progress"] is True:
-            print(k, "is a work in progress, can't merge")
+            print(k, "is a work in progress, can't merge") if not quiet else 0
             queue[k] = "Merge: work in progress"
             n += 1
             continue
         elif attrs["rebase_in_progress"] is True:
-            print(k, "is currently rebasing, polling until it is no longer rebasing")
+            print(
+                k, "is currently rebasing, polling until it is no longer rebasing"
+            ) if not quiet else 0
             # This is the median value we found for it to take when rebasing on
             # gitlab.alpinelinux.org/alpine/aports which is a big repo that holds lots
             # of recipes for building software
             sleep(3)
             continue
         elif attrs["rebase_in_progress"] is False and attrs["merge_error"] is not None:
-            print(k, attrs["merge_error"])
+            print(k, attrs["merge_error"]) if not quiet else 0
             queue[k] = "Rebase:" + attrs["merge_error"]
             n += 1
             continue
@@ -195,19 +207,19 @@ def main():
             mr.merge()
         except GitlabMRClosedError as e:
             if e.response_code == 406:
-                print(k, "cannot be merged, trying to rebase")
+                print(k, "cannot be merged, trying to rebase") if not quiet else 0
                 try:
                     mr.rebase(skip_ci=True)
                 except GitlabMRRebaseError as e:
                     if e.response_code == 403:
-                        print("Rebase failed:", e.error_message)
+                        print("Rebase failed:", e.error_message) if not quiet else 0
                         queue[k] = "Rebase:" + e.error_message
                         n += 1
                         continue
                 else:
                     continue
             elif e.response_code == 401:
-                print("Merge failed:", e.error_message)
+                print("Merge failed:", e.error_message) if not quiet else 0
                 queue[k] = "Merge:" + e.error_message
                 n += 1
                 continue
@@ -215,7 +227,7 @@ def main():
                 print(e.error_message, "aborting completely")
                 sys.exit(1)
         else:
-            print("Merged", k)
+            print("Merged", k) if not quiet else 0
             queue[k] = "merged"
             n += 1
 
