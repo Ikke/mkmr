@@ -24,7 +24,6 @@ class Config:
         # call the same server
         self.section = gitlab_host.replace("https://", "")
 
-    def write_config(self):
         """
             Write the configuration passed to us via the CLI to the config
             file if it's not there already or the user wants to overwrite it
