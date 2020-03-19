@@ -71,7 +71,7 @@ class Config:
         """
             Get the Gitlab object that is generated from this configuration file
         """
-        gl = gitlab.Gitlab.from_config(self.section, [self.config])
+        gl = Gitlab.from_config(self.section, [self.config])
         # If the user passed --token to us then override the token acquired
         # from private_token
         if self.options.token is not None:
