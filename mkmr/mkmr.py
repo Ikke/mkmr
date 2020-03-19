@@ -9,6 +9,8 @@ from git import Repo
 from mkmr.api import API
 from mkmr.config import Config
 
+from . import __version__
+
 
 def alpine_stable_prefix(str: str) -> Optional[str]:
     if str.startswith("3.8-"):
@@ -24,7 +26,7 @@ def alpine_stable_prefix(str: str) -> Optional[str]:
 
 
 def main():
-    parser = OptionParser(version="0.0.5")
+    parser = OptionParser(version=__version__)
     parser.add_option(
         "--token",
         dest="token",
