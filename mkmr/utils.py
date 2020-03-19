@@ -1,4 +1,5 @@
 from pathlib import Path
+from typing import Optional
 
 
 def create_dir(path: Path) -> Path:
@@ -24,10 +25,11 @@ def create_file(path: Path) -> Path:
     return path
 
 
-def find_config(p):
+def find_config(p: Optional[str]) -> Path:
     from os import getenv
 
     if p is not None:
+        p = Path(p)
         if p.is_file():
             return p
         else:
