@@ -1,4 +1,5 @@
 from configparser import SafeConfigParser
+from typing import Optional
 
 import inquirer
 from gitlab import Gitlab
@@ -7,6 +8,10 @@ from mkmr.utils import find_config
 
 
 class Config:
+    options: dict
+    config: Optional[str]
+    section: str
+
     def __init__(self, options, gitlab_host):
         self.options = options
         self.config = find_config(options.config)
