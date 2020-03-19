@@ -151,10 +151,9 @@ def main():
     origin = API(repo, options.origin)
     upstream = API(repo, options.upstream)
 
-    config = Config(options, upstream.host)
-
     try:
-        config.write_config(upstream)
+        config = Config(options, upstream.host)
+        config.write_config()
     except ValueError as e:
         print(e)
         sys.exit(1)
