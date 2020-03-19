@@ -152,7 +152,13 @@ def main():
     upstream = API(repo, options.upstream)
 
     config = Config(options, upstream.host)
-    config.write_config(upstream)
+
+    try:
+        config.write_config(upstream)
+    except ValueError as e:
+        print(e)
+        sys.exit(1)
+
     gl = config.get_gitlab()
 
     if options.source is not None:
