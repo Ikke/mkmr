@@ -1,8 +1,9 @@
 from configparser import SafeConfigParser
-from mkmr.utils import find_config
-import gitlab
+
 import inquirer
-import sys
+from gitlab import Gitlab
+
+from mkmr.utils import find_config
 
 
 class Config:
