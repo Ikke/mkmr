@@ -4,7 +4,7 @@ from typing import Optional
 
 import editor
 import inquirer
-from git import Repo
+from git import Repo, exc
 
 from mkmr.api import API
 from mkmr.config import Config
@@ -182,7 +182,19 @@ def main():
 
     # git pull --rebase the source branch on top of the target branch
     if options.dry_run is False:
-        repo.git.pull("--quiet", options.upstream, "--rebase", target_branch)
+        try:
+            repo.git.pull("--quiet", options.upstream, "--rebase", target_branch)
+        except exc.GitCommandError as e:
+            # GitCommandError contains some info we don't need since we tell the
+            # user about that ourselves already.
+            gitOutput = e.stdout.split("stdout: ")[1]
+            print(
+                "Rebasing the current branch on top of the remote branch failed!\n"
+                "Please see the following git output for what exactly went wrong:\n\n"
+                "{}\n\n"
+                "After sucessfully rebasing your branch please run mkmr again.".format(gitOutput)
+            )
+            sys.exit(1)
 
     str = options.upstream + "/" + target_branch
     str = str + ".." + source_branch
