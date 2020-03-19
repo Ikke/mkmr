@@ -281,7 +281,7 @@ def main():
         sys.exit(0)
 
     origin_project = gl.projects.get(
-        origin.projectid(token=gl.private_token), retry_transient_errors=True
+        origin.projectid(token=gl.private_token), retry_transient_errors=True, lazy=True
     )
 
     mr = origin_project.mergerequests.create(
