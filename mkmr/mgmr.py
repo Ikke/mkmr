@@ -153,7 +153,7 @@ def main():
         if n + 1 > keys_len:
             break
 
-        # Set our neddle in the dictionary
+        # Set our neddle in the list
         k = keys[n]
 
         """
