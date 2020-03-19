@@ -67,7 +67,7 @@ class Config:
                 with open(self.config, "w") as c:
                     parser.write(c)
 
-    def get_gitlab(self):
+    def get_gitlab(self) -> Gitlab:
         """
             Get the Gitlab object that is generated from this configuration file
         """
