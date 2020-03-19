@@ -1,0 +1,5 @@
+#!/bin/sh
+for i in docs/*.scd; do
+	echo "Generating $i"
+	scdoc < $i > ${i%.scd}
+done
