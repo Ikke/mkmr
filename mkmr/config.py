@@ -56,8 +56,7 @@ class Config:
                     questions = [inquirer.Text("token", message="personal access token")]
                     token_answer = inquirer.prompt(questions)
                 if token_answer is None:
-                    print("personal access token not provided")
-                    sys.exit(1)
+                    raise ValueError("personal access token not provided")
                 else:
                     parser[self.section]["private_token"] = token_answer["token"]
                     with open(self.config, "w") as c:
