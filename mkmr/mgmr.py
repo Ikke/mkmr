@@ -199,7 +199,7 @@ def main():
             continue
         elif attrs["rebase_in_progress"] is False and attrs["merge_error"] is not None:
             print(k, attrs["merge_error"]) if not quiet else 0
-            queue[k] = "Rebase:" + attrs["merge_error"]
+            queue[k] = "Rebase: " + attrs["merge_error"]
             n += 1
             continue
 
@@ -213,14 +213,14 @@ def main():
                 except GitlabMRRebaseError as e:
                     if e.response_code == 403:
                         print("Rebase failed:", e.error_message) if not quiet else 0
-                        queue[k] = "Rebase:" + e.error_message
+                        queue[k] = "Rebase: " + e.error_message
                         n += 1
                         continue
                 else:
                     continue
             elif e.response_code == 401:
                 print("Merge failed:", e.error_message) if not quiet else 0
-                queue[k] = "Merge:" + e.error_message
+                queue[k] = "Merge: " + e.error_message
                 n += 1
                 continue
             else:
