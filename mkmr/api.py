@@ -30,7 +30,12 @@ class API:
         """
         p = parse(self.uri)
 
-        self.host = "https://" + p.domain
+        try:
+            self.host = "https://" + p.domain
+        except AttributeError:
+            raise AttributeError(
+                "url from remote '{}' has no valid URL: {}".format(remote, self.uri)
+            )
         try:
             self.user = p.owner
         except AttributeError:
