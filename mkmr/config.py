@@ -24,7 +24,7 @@ class Config:
         # call the same server
         self.section = gitlab_host.replace("https://", "")
 
-    def write_config(self, upstream):
+    def write_config(self):
         """
             Write the configuration passed to us via the CLI to the config
             file if it's not there already or the user wants to overwrite it
@@ -40,7 +40,7 @@ class Config:
         # In case the 'url' options is not set in the section we are looking for
         # then just write it out.
         if parser.has_option(self.section, "url") is False:
-            parser[self.section]["url"] = upstream.host
+            parser[self.section]["url"] = "https://" + self.section
             with open(self.config, "w") as c:
                 parser.write(c)
 
