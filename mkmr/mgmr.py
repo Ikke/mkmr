@@ -246,6 +246,10 @@ def main():
                 queue[k] = "Merge: " + e.error_message
                 n += 1
                 continue
+            elif e.response_code == 405:
+                print("Merge failed:", e.error_message) if not quiet else 0
+                queue[k] = "Merge: " + e.error_message
+                n += 1
             else:
                 print(e.error_message, "aborting completely")
                 sys.exit(1)
