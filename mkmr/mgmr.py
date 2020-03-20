@@ -77,6 +77,14 @@ def main():
         default=False,
         help="Print only the json with the results or in case of an unrecoverable error",
     )
+    parser.add_option(
+        "-y",
+        "--yes",
+        dest="yes",
+        action="store_true",
+        default=True,
+        help="Assume yes to all prompts",
+    )
 
     (options, args) = parser.parse_args(sys.argv)
 
@@ -206,9 +214,12 @@ def main():
             n += 1
             continue
         elif attrs["pipeline"]["status"] == "failed":
-            choice = inquirer.confirm(
-                "Merge merge request even though the CI pipeline failed?", default=True
-            )
+            if options.yes is False:
+                choice = inquirer.confirm(
+                    "Merge merge request even though the CI pipeline failed?", default=True
+                )
+            else:
+                choice = options.yes
             if choice is False:
                 print(k, "skipped by the user because CI pipeline failed") if not quiet else 0
                 queue[k] = "Merge: canceled by user prompt"
