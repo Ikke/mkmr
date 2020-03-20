@@ -3,6 +3,7 @@ from json import dumps
 from optparse import OptionParser
 from time import sleep
 
+import inquirer
 from git import Repo
 from gitlab import GitlabMRClosedError, GitlabMRRebaseError
 
@@ -204,6 +205,15 @@ def main():
             queue[k] = "Rebase: " + attrs["merge_error"]
             n += 1
             continue
+        elif attrs["pipeline"]["status"] == "failed":
+            choice = inquirer.confirm(
+                "Merge merge request even though the CI pipeline failed?", default=True
+            )
+            if choice is False:
+                print(k, "skipped by the user because CI pipeline failed") if not quiet else 0
+                queue[k] = "Merge: canceled by user prompt"
+                n += 1
+                continue
 
         try:
             mr.merge()
