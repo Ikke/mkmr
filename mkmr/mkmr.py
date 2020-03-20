@@ -28,14 +28,7 @@ def alpine_stable_prefix(str: str) -> Optional[str]:
 def main():
     parser = OptionParser(version=__version__)
     parser.add_option(
-        "--token",
-        dest="token",
-        action="store",
-        type="string",
-        help="GitLab Personal Access Token, if there is no "
-        "private_token in your configuration file, this one "
-        "will be writen there, if there isn't one it will "
-        "merely override it",
+        "--token", dest="token", action="store", type="string", help="GitLab Personal Access Token"
     )
     parser.add_option(
         "-c",
@@ -123,11 +116,7 @@ def main():
         dest="dry_run",
         action="store_true",
         default=False,
-        help="don't make the merge request, just show how it "
-        "would look like. Note that using this disables "
-        "rebasing on top of the target branch, so some "
-        "results, like how many commits there are between "
-        "your branch and upstream, may be innacurate",
+        help="don't make the merge request, just show how it would look like",
     )
     parser.add_option(
         "--overwrite",
