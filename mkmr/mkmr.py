@@ -189,6 +189,13 @@ def main():
     str = str + ".." + source_branch
     commits = list(repo.iter_commits(str))
     commit_count = len(commits)
+
+    # Fail early if we are creating a merge request without commits in difference
+    # to the target branch
+    if commit_count < 1:
+        print("no commits in difference between {}".format(str.replace("..", " and ")))
+        sys.exit(1)
+
     commit_titles = dict()
     for c in commits:
         cstr = c.message.partition("\n")
