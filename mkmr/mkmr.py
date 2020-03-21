@@ -227,8 +227,8 @@ def main():
             labels.append("A-backport")
             labels.append("v" + alpine_prefix)
 
-    if commit_count < 2:
-        commit = repo.head.commit
+    if commit_count == 1:
+        commit = list(commit_titles.values())[0]
     else:
         questions = [
             inquirer.List(
