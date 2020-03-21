@@ -83,6 +83,6 @@ class Config:
 
         # If the user passed --timeout to us then override the token acquired
         # from timeout or the default value
-        if self.options.timeout is not None:
+        if hasattr(self.options, "timeout") and self.options.timeout is not None:
             gl.timeout = self.options.timeout
         return gl
