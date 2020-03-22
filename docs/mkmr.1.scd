@@ -20,7 +20,7 @@ mkmr - Make merge requests to a GitLab instance
 	Specify a GitLab personal access token
 
 *-c, --config* <CONFIG>
-	Specify a configuration file
+	Specify a configuration file, will create one in that path if it doesn't exist
 
 *--target* <TARGET>
 	Specify a branch where the changes will be merged into, defaults to master
