@@ -31,6 +31,7 @@ license = "GPL-3.0-or-later"
 [tool.flit.scripts]
 mkmr = "mkmr.mkmr:main"
 mgmr = "mkmr.mgmr:main"
+edmr = "mkmr.edmr:main"
 
 [tool.flit.sdist]
 include = ["mkmr/"]
