@@ -174,15 +174,19 @@ def main():
         try:
             repo.git.pull("--quiet", options.upstream, "--rebase", target_branch)
         except exc.GitCommandError as e:
-            # GitCommandError contains some info we don't need since we tell the
-            # user about that ourselves already.
-            gitOutput = e.stdout.split("stdout: ")[1]
-            print(
-                "Rebasing the current branch on top of the remote branch failed!\n"
-                "Please see the following git output for what exactly went wrong:\n\n"
-                "{}\n\n"
-                "After sucessfully rebasing your branch please run mkmr again.".format(gitOutput)
-            )
+            # There are multiple reasons that GitCommandError can be raised, try to guess based on
+            # the string that is given to us, it would be better if it raised GitCommandError with a
+            # specific subtype that would tell us what it is but we can not rely on that
+            if "You have unstaged changes" in e.stderr:
+                print(
+                    "Rebasing {} on top of {} failed!\n There are unstaged changes, please commit "
+                    "or stash them".format(source_branch, target_branch)
+                )
+            if "Failed to merge in the changes" in e.stderr:
+                print(
+                    "Rebasing {} on top of {} failed!\n Please check the output below:\n\n"
+                    "{}".format(source_branch, target_branch, e.stdout)
+                )
             sys.exit(1)
 
     str = options.upstream + "/" + target_branch
