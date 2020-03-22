@@ -145,6 +145,9 @@ def main():
     except ValueError as e:
         print(e)
         sys.exit(1)
+    except PermissionError as e:
+        print("Not enough permissions to create config on '{}'".format(e.filename))
+        sys.exit(1)
 
     gl = config.get_gitlab()
 
