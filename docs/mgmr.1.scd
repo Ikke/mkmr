@@ -20,7 +20,7 @@ mgmr - Merge merge requests in a GitLab instance
 	Specify a GitLab personal access token
 
 *-c, --config* <CONFIG>
-	Specify a configuration file
+	Specify a configuration file, will create one in that path if it doesn't exist
 
 *-n, --dry-run*
 	Don't create the merge request, just show how it would look like
