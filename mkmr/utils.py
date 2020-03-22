@@ -30,10 +30,7 @@ def find_config(p: Optional[str]) -> Path:
 
     if p is not None:
         p = Path(p)
-        if p.is_file():
-            return p
-        else:
-            raise ValueError("couldn't find configuration file in {}".format(p))
+        return create_file(p)
 
     xdgpath = getenv("XDG_CONFIG_HOME")
     if xdgpath is not None:
