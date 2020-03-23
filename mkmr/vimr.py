@@ -215,7 +215,6 @@ def main():
 
         print(v, oldval)
         setattr(mr, k, v)
-        print("{}: {} -> {}".format(k, oldval, v))
 
     if options.dry_run is True:
         sys.exit(0)
