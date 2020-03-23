@@ -165,14 +165,15 @@ def main():
             )
             continue
         else:
-            oldval = getattr(mr, k)
-            if type(oldval) == str:
-                oldval = bytes(oldval, "utf-8")
-            elif type(oldval) == list:
-                oldval = bytes(" ".join(oldval), "utf-8")
+            if hasattr(mr, k):
+                oldval = getattr(mr, k)
+                if type(oldval) == list:
+                    oldval = bytes(" ".join(oldval), "utf-8")
+                else:
+                    oldval = bytes(str(oldval), "utf-8")
             else:
-                oldval = bytes(oldval)
-            v = editor.edit(contents=oldval)
+                oldval = None
+            v = editor.edit(contents=oldval).decode("utf-8")
 
         if k == "assignee_id" or k == "milestone_id":
             # "" and 0 are the same thing for the GitLab API, it justs allows us to try a
@@ -209,8 +210,12 @@ def main():
         if should_skip is True:
             continue
 
-        print("{}: {} -> {}".format(k, getattr(mr, k), v))
+        if oldval is not None:
+            oldval = oldval.decode("utf-8")
+
+        print(v, oldval)
         setattr(mr, k, v)
+        print("{}: {} -> {}".format(k, oldval, v))
 
     if options.dry_run is True:
         sys.exit(0)
