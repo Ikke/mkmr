@@ -162,16 +162,24 @@ def main():
         # Check if we are passing a valid type
         if k == "squash" or k == "allow_collaboration" or k == "allow_maintainer_to_push":
             setattr(mr, k, not mr.attributes[k])
+            enter("Set {} to {}".format(k, not mr.attributes[k]))
             continue
         elif k == "state":
             setattr(mr, "state_event", state)
+            enter("Set state to {}".format(state))
             continue
         elif k == "discussion_locked":
             setattr(mr, "discussion_locked", discussion)
+            enter("Set discussion_locked to {}".format(discussion))
             continue
         elif k == "remove_source_branch":
             setattr(
                 mr, "force_remove_source_branch", not mr.attributes["force_remove_source_branch"]
+            )
+            enter(
+                "Set remove_source_branch to {}".format(
+                    not mr.attributes["force_remove_source_branch"]
+                )
             )
             continue
         else:
@@ -195,15 +203,18 @@ def main():
             try:
                 v = int(v)
             except ValueError:
-                print("value of {} ({}), is invalid, should be an integer".format(k, v))
+                enter("value of {} ({}), is invalid, should be an integer".format(k, v))
                 continue
         elif k == "title" or k == "target_branch":
-            if v == "":
-                print("value of {} should not be empty".format(k))
+            if v == oldval:
+                enter("value of {} did not change".format(k))
+                continue
+            elif v == "":
+                enter("value of {} should not be empty".format(k))
                 continue
         elif k == "description":
             if len(v) > 1048576:
-                print("description has more characters than limit of 1.048.576")
+                enter("description has more characters than limit of 1.048.576")
                 continue
         elif k == "labels":
             v = v.split()
@@ -220,12 +231,10 @@ def main():
                     should_skip = True
 
         if should_skip is True:
+            enter()
             continue
 
-        if oldval is not None:
-            oldval = oldval.decode("utf-8")
-
-        print(v, oldval)
+        enter("Set value of {} to {}".format(k, v if k != "description" else ("\n\n" + v)))
         setattr(mr, k, v)
 
     if options.dry_run is True:
