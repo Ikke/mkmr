@@ -185,9 +185,9 @@ def main():
             except ValueError:
                 print("value of {} ({}), is invalid, should be an integer".format(k, v))
                 continue
-        elif k == "title":
+        elif k == "title" or k == "target_branch":
             if v == "":
-                print("value of title should not be empty")
+                print("value of {} should not be empty".format(k))
                 continue
         elif k == "description":
             if len(v) > 1048576:
