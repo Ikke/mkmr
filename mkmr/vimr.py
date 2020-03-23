@@ -13,7 +13,7 @@ from mkmr.config import Config
 from . import __version__
 
 
-def enter(s=None) -> None:
+def prompt(s=None) -> None:
     print(s) if s is not None else 0
     input("Press Enter to continue...")
 
@@ -162,25 +162,25 @@ def main():
         # Check if we are passing a valid type
         if k == "squash" or k == "allow_collaboration" or k == "allow_maintainer_to_push":
             setattr(mr, k, not mr.attributes[k])
-            enter("Set {} to {}".format(k, not mr.attributes[k]))
+            prompt("Set {} to {}".format(k, not mr.attributes[k])) if options.yes is False else 0
             continue
         elif k == "state":
             setattr(mr, "state_event", state)
-            enter("Set state to {}".format(state))
+            prompt("Set state to {}".format(state)) if options.yes is False else 0
             continue
         elif k == "discussion_locked":
             setattr(mr, "discussion_locked", discussion)
-            enter("Set discussion_locked to {}".format(discussion))
+            prompt("Set discussion_locked to {}".format(discussion)) if options.yes is False else 0
             continue
         elif k == "remove_source_branch":
             setattr(
                 mr, "force_remove_source_branch", not mr.attributes["force_remove_source_branch"]
             )
-            enter(
+            prompt(
                 "Set remove_source_branch to {}".format(
                     not mr.attributes["force_remove_source_branch"]
                 )
-            )
+            ) if options.yes is False else 0
             continue
         else:
             if hasattr(mr, k):
@@ -203,18 +203,22 @@ def main():
             try:
                 v = int(v)
             except ValueError:
-                enter("value of {} ({}), is invalid, should be an integer".format(k, v))
+                prompt(
+                    "value of {} ({}), is invalid, should be an integer".format(k, v)
+                ) if options.yes is False else 0
                 continue
         elif k == "title" or k == "target_branch":
             if v == oldval:
-                enter("value of {} did not change".format(k))
+                prompt("value of {} did not change".format(k)) if options.yes is False else 0
                 continue
             elif v == "":
-                enter("value of {} should not be empty".format(k))
+                prompt("value of {} should not be empty".format(k)) if options.yes is False else 0
                 continue
         elif k == "description":
             if len(v) > 1048576:
-                enter("description has more characters than limit of 1.048.576")
+                prompt(
+                    "description has more characters than limit of 1.048.576"
+                ) if options.yes is False else 0
                 continue
         elif k == "labels":
             v = v.split()
@@ -227,14 +231,18 @@ def main():
                 try:
                     value = int(value)
                 except ValueError:
-                    print("key {} has invalid sub-value {} in value {}".format(k, value, v))
+                    print(
+                        "key {} has invalid sub-value {} in value {}".format(k, value, v)
+                    ) if options.yes is False else 0
                     should_skip = True
 
         if should_skip is True:
-            enter()
+            prompt() if options.yes is False else 0
             continue
 
-        enter("Set value of {} to {}".format(k, v if k != "description" else ("\n\n" + v)))
+        prompt(
+            "Set value of {} to {}".format(k, v if k != "description" else ("\n\n" + v))
+        ) if options.yes is False else 0
         setattr(mr, k, v)
 
     if options.dry_run is True:
