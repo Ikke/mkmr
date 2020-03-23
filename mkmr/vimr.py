@@ -179,8 +179,10 @@ def main():
                 else:
                     oldval = bytes(str(oldval), "utf-8")
             else:
-                oldval = None
+                oldval = bytes("", "utf-8")
             v = editor.edit(contents=oldval).decode("utf-8")
+
+        oldval = oldval.decode("utf-8")
 
         if k == "assignee_id" or k == "milestone_id":
             # "" and 0 are the same thing for the GitLab API, it justs allows us to try a
