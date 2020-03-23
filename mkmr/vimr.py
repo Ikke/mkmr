@@ -131,6 +131,8 @@ def main():
     ]
 
     while True:
+        should_skip = False
+
         question = [
             inquirer.List(
                 "attr", message="Pick an attribute to edit", choices=valid_values, carousel=True
@@ -204,7 +206,7 @@ def main():
                     print("key {} has invalid sub-value {} in value {}".format(k, value, v))
                     should_skip = True
 
-        if should_skip is not None and should_skip is True:
+        if should_skip is True:
             continue
 
         print("{}: {} -> {}".format(k, getattr(mr, k), v))
