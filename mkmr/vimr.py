@@ -142,7 +142,10 @@ def main():
 
         question = [
             inquirer.List(
-                "attr", message="Pick an attribute to edit", choices=valid_values, carousel=True
+                "attr",
+                message="Pick an attribute to edit (or quit)",
+                choices=valid_values,
+                carousel=True,
             )
         ]
         answer = inquirer.prompt(question)
