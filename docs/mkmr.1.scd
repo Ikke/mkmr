@@ -123,8 +123,8 @@ does offer special support for Alpine Linux handling of GitLab
 The following is a write-up of things mkmr does to better integrate with Alpine
 Linux:
 
-We automatically add Alpine Linux specific labels like `A-add`, `A-move`,
-`A-upgrade`, `A-backport` and others as appropriate.
+We automatically add Alpine Linux specific labels like A-add, A-move,
+A-upgrade, A-backport and others as appropriate.
 
 We automatically guess the target branch in case your source branch name
 matches a specific pattern, namely that it starts with a version number
@@ -134,4 +134,4 @@ request against 3.11-stable.
 
 It will also prefix the title with a version number if one is making
 merge requests against one of the branches, merge requests targetting
-3.x-stable will have `[3.x]` prefixed to their title.
+3.x-stable will have [3.x] prefixed to their title.
