@@ -131,7 +131,9 @@ def main():
 
     while True:
         question = [
-            inquirer.List("attr", message="Pick an attribute to edit", choices=valid_values)
+            inquirer.List(
+                "attr", message="Pick an attribute to edit", choices=valid_values, carousel=True
+            )
         ]
         answer = inquirer.prompt(question)
 
