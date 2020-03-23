@@ -68,7 +68,7 @@ def main():
         "--yes",
         dest="yes",
         action="store_true",
-        default=True,
+        default=False,
         help="Assume yes to all prompts",
     )
 
