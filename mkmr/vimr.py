@@ -1,5 +1,6 @@
 import sys
 from optparse import OptionParser
+from os import system
 
 import editor
 import inquirer
@@ -10,6 +11,11 @@ from mkmr.api import API
 from mkmr.config import Config
 
 from . import __version__
+
+
+def enter(s=None) -> None:
+    print(s) if s is not None else 0
+    input("Press Enter to continue...")
 
 
 def main():
