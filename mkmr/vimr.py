@@ -138,6 +138,7 @@ def main():
 
     while True:
         should_skip = False
+        system("clear")
 
         question = [
             inquirer.List(
