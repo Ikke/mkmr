@@ -142,6 +142,9 @@ def main():
         if answer is None or answer == "exit":
             break
 
+        # Split by the whitespace and get the first argument which should, most of the time, be the
+        # name of the object we are dealing with, stuff after the space usually concern showing nice
+        # information to the user like a preview of what value will be set on a boolean attribute
         k = answer["attr"].split()[0]
 
         # Check if we are passing a valid type
