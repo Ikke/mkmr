@@ -133,7 +133,7 @@ def main():
         "allow_maintainer_to_push (Set to: {})".format(
             not mr.attributes["allow_maintainer_to_push"]
         ),
-        "exit",
+        "quit",
     ]
 
     while True:
@@ -147,7 +147,7 @@ def main():
         answer = inquirer.prompt(question)
 
         # We reach this in case the user calls for ctrl+c, or takes the exit option
-        if answer is None or answer["attr"] == "exit":
+        if answer is None or answer["attr"] == "quit":
             break
 
         # Split by the whitespace and get the first argument which should, most of the time, be the
