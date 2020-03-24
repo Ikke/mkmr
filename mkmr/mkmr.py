@@ -175,6 +175,12 @@ def main():
 
     # git pull --rebase the source branch on top of the target branch
     if options.dry_run is False:
+        # Switch to another branch if we were given --source
+        # otherwise we will do a git pull into the wrong branch
+        if repo.head.reference != source_branch:
+            repo.head.reference = source_branch
+            repo.heads[source_branch].checkout()
+
         try:
             repo.git.pull("--quiet", options.upstream, "--rebase", target_branch)
         except exc.GitCommandError as e:
