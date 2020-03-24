@@ -48,8 +48,6 @@ def create_file(path: Path) -> Path:
 
 
 def find_config(p: Optional[str]) -> Path:
-    from os import getenv
-
     if p is not None:
         p = Path(p)
         return create_file(p)
