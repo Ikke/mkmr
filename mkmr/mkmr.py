@@ -8,8 +8,29 @@ from git import Repo, exc
 
 from mkmr.api import API
 from mkmr.config import Config
+from mkmr.utils import create_dir
 
 from . import __version__
+
+
+def write_to_cache(branch: str, mr: int) -> bool:
+    from os import getenv
+    from pathlib import Path
+
+    cachefile = branch
+
+    cachedir = getenv("XDG_CACHE_HOME")
+    if cachedir is not None:
+        cachedir = create_dir(Path(cachedir / "mkmr" / "branch-to-mr"))
+    else:
+        homepath = getenv("HOME")
+        if homepath is None:
+            raise ValueError("Neither XDG_CONFIG_HOME or HOME are set, please set XDG_CACHE_HOME")
+        else:
+            cachedir = create_dir(Path(homepath / ".cache" / "mkmr" / "branch-to-mr"))
+
+    cachepath = Path(cachedir / cachefile)
+    cachepath.write_text(branch)
 
 
 def alpine_stable_prefix(str: str) -> Optional[str]:
@@ -317,6 +338,14 @@ def main():
     print("title:", mr.attributes["title"])
     print("state:", mr.attributes["state"])
     print("url:", mr.attributes["web_url"])
+
+    try:
+        write_to_cache(source_branch, mr.attributes["iid"])
+    except (KeyboardInterrupt, SystemExit):
+        raise
+    except:
+        print("Failed to write to cache, merging via branch won't be available")
+        print("Error: {}".format(sys.exc_info()[0]))
 
 
 if __name__ == "__main__":
