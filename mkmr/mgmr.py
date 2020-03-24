@@ -9,6 +9,7 @@ from gitlab import GitlabMRClosedError, GitlabMRRebaseError
 
 from mkmr.api import API
 from mkmr.config import Config
+from mkmr.utils import find_cache
 
 from . import __version__
 
@@ -16,11 +17,7 @@ from . import __version__
 def main():
     parser = OptionParser(version=__version__)
     parser.add_option(
-        "--token",
-        dest="token",
-        action="store",
-        type="string",
-        help="GitLab Personal Access Token"
+        "--token", dest="token", action="store", type="string", help="GitLab Personal Access Token"
     )
     parser.add_option(
         "-c",
@@ -169,6 +166,25 @@ def main():
 
         # Set our neddle in the list
         k = keys[n]
+
+        # Try to convert branch
+        if not k.isdigit():
+            try:
+                cachepath = find_cache()
+                cachepath = cachepath / "branch" / k
+                k = cachepath.read_text()
+            except FileNotFoundError:
+                print("Found invalid branch name {}".format(k)) if not quiet else 0
+                queue[k] = "Invalid: branch name has no corresponding cache file"
+                n += 1
+                continue
+            else:
+                # This is executed in a try-catch if there are no exceptions raised
+                if k == "":
+                    print("Found invalid branch name {}".format(k)) if not quiet else 0
+                    queue[k] = "Invalid: branch name cache file is empty"
+                    n += 1
+                    continue
 
         """
         Get the merge request, include_rebase_in_progress is required so
