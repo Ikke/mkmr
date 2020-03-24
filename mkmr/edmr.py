@@ -7,25 +7,9 @@ from gitlab import GitlabAuthenticationError, GitlabUpdateError
 
 from mkmr.api import API
 from mkmr.config import Config
+from mkmr.utils import strtobool
 
 from . import __version__
-
-
-def strtobool(s) -> Optional[bool]:
-    """
-    Convert a string into a boolean value or None
-
-    True is returned when yes, true or 1 is called
-    False is returned when no, false or 0 is called
-    None is returned on any other value, we do this because we want to know if we are passing an
-    invalid value
-    """
-    if s.lower() in ("yes", "true", "1"):
-        return True
-    elif s.lower() in ("no", "false", "0"):
-        return False
-    else:
-        return None
 
 
 def main():
