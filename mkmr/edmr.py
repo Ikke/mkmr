@@ -163,6 +163,14 @@ def main():
             if v == "":
                 print("value of title should not be empty") if not options.quiet else 0
                 continue
+        elif k == ":title" or k == "title:":
+            if v == "":
+                print("value of title should not be empty") if not options.quiet else 0
+                continue
+            if k == ":title":
+                v = v + " " + mr.attributes["title"]
+            elif k == "title:":
+                v = mr.attributes["title"] + " " + v
         elif k == "description":
             if len(v) > 1048576:
                 print(
