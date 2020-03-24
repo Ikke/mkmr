@@ -158,6 +158,9 @@ def main():
                 ) if not options.quiet else 0
                 continue
         elif k == "title":
+            if v == mr.attributes["title"]:
+                print("value of title hasn't changed") if not options.quiet else 0
+                continue
             if v == "":
                 print("value of title should not be empty") if not options.quiet else 0
                 continue
