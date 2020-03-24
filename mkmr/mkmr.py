@@ -8,7 +8,7 @@ from git import Repo, exc
 
 from mkmr.api import API
 from mkmr.config import Config
-from mkmr.utils import create_dir, find_cache
+from mkmr.utils import create_dir, find_cache, create_file
 
 from . import __version__
 
@@ -320,8 +320,7 @@ def main():
     print("url:", mr.attributes["web_url"])
 
     try:
-        cachedir = find_cache()
-        cachepath = cachedir / "branch" / source_branch
+        cachepath = create_file(find_cache() / "branch" / source_branch)
         cachepath.write_text(mr.attributes["iid"])
     except ValueError:
         print("Failed to write to cache, merging via branch won't be available")
