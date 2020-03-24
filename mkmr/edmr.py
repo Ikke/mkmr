@@ -112,7 +112,9 @@ def main():
         "remove_source_branch",
         "state_event",
         "target_branch",
+        ":title",
         "title",
+        "title:",
         "discussion_locked",
         "squash",
         "allow_collaboration",
@@ -175,6 +177,7 @@ def main():
                 v = v + " " + mr.attributes["title"]
             elif k == "title:":
                 v = mr.attributes["title"] + " " + v
+            k = "title"
         elif k == "description":
             if len(v) > 1048576:
                 print(
