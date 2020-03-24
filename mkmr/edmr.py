@@ -1,6 +1,5 @@
 import sys
 from optparse import OptionParser
-from typing import Optional
 
 from git import Repo
 from gitlab import GitlabAuthenticationError, GitlabUpdateError
