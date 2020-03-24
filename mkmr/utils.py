@@ -1,4 +1,5 @@
 from pathlib import Path
+from os import getenv
 from typing import Optional
 
 
@@ -64,3 +65,18 @@ def find_config(p: Optional[str]) -> Path:
     if xdgpath is None:
         xdgpath = Path(homepath)
         return create_file(xdgpath / ".config" / "mkmr" / "config")
+
+
+def find_cache() -> Path:
+    xdgpath = getenv("XDG_CACHE_HOME")
+    if xdgpath is not None:
+        xdgpath = Path(xdgpath)
+        return create_file(xdgpath / "mkmr")
+
+    homepath = getenv("HOME")
+    if homepath is None:
+        raise ValueError("Neither XDG_CACHE_HOME or HOME are set, please set XDG_CACHE_HOME")
+
+    if xdgpath is None:
+        xdgpath = Path(homepath)
+        return create_file(xdgpath / ".cache" / "mkmr")
