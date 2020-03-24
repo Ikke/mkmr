@@ -174,13 +174,13 @@ def main():
         elif k == "description":
             if len(v) > 1048576:
                 print(
-                    "description has more characters than limit of 1.048.576"
+                    "description has more characters than limit of 1048576"
                 ) if not options.quiet else 0
                 continue
         elif k == ":description" or k == "description:":
             if len(v) + len(mr.attributes["description"]) > 1048576:
                 print(
-                    "description has more characters than limit of 1.048.576"
+                    "description has more characters than limit of 1048576"
                 ) if not options.quiet else 0
                 continue
             if k == ":description":
