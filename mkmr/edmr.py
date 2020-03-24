@@ -177,6 +177,16 @@ def main():
                     "description has more characters than limit of 1.048.576"
                 ) if not options.quiet else 0
                 continue
+        elif k == ":description" or k == "description:":
+            if len(v) + len(mr.attributes["description"]) > 1048576:
+                print(
+                    "description has more characters than limit of 1.048.576"
+                ) if not options.quiet else 0
+                continue
+            if k == ":description":
+                v = v + " " + mr.attributes["description"]
+            elif k == "description:":
+                v = mr.attributes["description"] + " " + v
         elif k == "labels":
             v = v.split()
         elif k == "assignee_ids":
