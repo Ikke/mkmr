@@ -71,7 +71,7 @@ def find_cache() -> Path:
     xdgpath = getenv("XDG_CACHE_HOME")
     if xdgpath is not None:
         xdgpath = Path(xdgpath)
-        return create_file(xdgpath / "mkmr")
+        return create_dir(xdgpath / "mkmr")
 
     homepath = getenv("HOME")
     if homepath is None:
@@ -79,4 +79,4 @@ def find_cache() -> Path:
 
     if xdgpath is None:
         xdgpath = Path(homepath)
-        return create_file(xdgpath / ".cache" / "mkmr")
+        return create_dir(xdgpath / ".cache" / "mkmr")
