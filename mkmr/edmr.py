@@ -103,7 +103,9 @@ def main():
         "assignee_id",
         "assignee_ids",
         "description",
+        ":labels",
         "labels",
+        "labels:",
         "milestone_id",
         "remove_source_branch",
         "state_event",
@@ -189,6 +191,12 @@ def main():
                 v = mr.attributes["description"] + " " + v
         elif k == "labels":
             v = v.split()
+        elif k == ":labels" or k == "labels:":
+            o = mr.attributes["labels"]
+            for val in v.split():
+                o.append(val)
+            k = "labels"
+            v = o
         elif k == "assignee_ids":
             # "" and 0 are the same thing for the GitLab API, it justs allows us to try a conversion
             # to int
