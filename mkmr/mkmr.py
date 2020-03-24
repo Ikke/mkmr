@@ -8,7 +8,7 @@ from git import Repo, exc
 
 from mkmr.api import API
 from mkmr.config import Config
-from mkmr.utils import create_dir, find_cache, create_file
+from mkmr.utils import create_dir, create_file, find_cache
 
 from . import __version__
 
