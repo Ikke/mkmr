@@ -102,7 +102,9 @@ def main():
     valid_values = {
         "assignee_id",
         "assignee_ids",
+        ":description",
         "description",
+        "description:",
         ":labels",
         "labels",
         "labels:",
@@ -189,6 +191,7 @@ def main():
                 v = v + " " + mr.attributes["description"]
             elif k == "description:":
                 v = mr.attributes["description"] + " " + v
+            k = "description"
         elif k == "labels":
             v = v.split()
         elif k == ":labels" or k == "labels:":
