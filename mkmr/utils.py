@@ -2,6 +2,28 @@ from pathlib import Path
 from typing import Optional
 
 
+def strtobool(s) -> Optional[bool]:
+    """
+    Convert a string into a boolean value or None
+
+    True is returned when yes, true or 1 is called
+    False is returned when no, false or 0 is called
+    None is returned on any other value, we do this because we want to know if we are passing an
+    invalid value
+    """
+    if s.lower() in ("yes", "true", "1"):
+        return True
+    elif s.lower() in ("no", "false", "0"):
+        return False
+    else:
+        return None
+
+
+def prompt(s=None) -> None:
+    print(s) if s is not None else 0
+    input("Press Enter to continue...")
+
+
 def create_dir(path: Path) -> Path:
     if path.exists() and not path.is_dir():
         path.unlink()
