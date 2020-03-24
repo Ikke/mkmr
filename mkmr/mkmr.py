@@ -321,7 +321,7 @@ def main():
 
     try:
         cachepath = create_file(find_cache() / "branch" / source_branch)
-        cachepath.write_text(mr.attributes["iid"])
+        cachepath.write_text(str(mr.attributes["iid"]))
     except ValueError:
         print("Failed to write to cache, merging via branch won't be available")
         print("Error: {}".format(sys.exc_info()[0]))
