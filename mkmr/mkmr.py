@@ -227,7 +227,7 @@ def main():
             if ": upgrade to " in s and "A-upgrade" not in labels:
                 labels.append("A-upgrade")
                 continue
-            if ": security upgrade to " in s and "T-security" not in labels:
+            if (": security upgrade to " or ": fix CVE-") in s and "T-security" not in labels:
                 labels.append("T-Security")
                 continue
         if alpine_prefix is not None:
