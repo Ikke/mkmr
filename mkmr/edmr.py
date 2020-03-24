@@ -64,14 +64,6 @@ def main():
         default="upstream",
         help="which remote from which to operate on",
     )
-    parser.add_option(
-        "-y",
-        "--yes",
-        dest="yes",
-        action="store_true",
-        default=True,
-        help="Assume yes to all prompts",
-    )
 
     (options, args) = parser.parse_args(sys.argv)
 
