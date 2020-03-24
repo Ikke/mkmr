@@ -171,7 +171,7 @@ def main():
                 ) if not options.quiet else 0
                 continue
         elif k == "labels":
-            v = v.split(",")
+            v = v.split()
         elif k == "assignee_ids":
             # "" and 0 are the same thing for the GitLab API, it justs allows us to try a conversion
             # to int
