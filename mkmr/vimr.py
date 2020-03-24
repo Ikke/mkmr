@@ -9,13 +9,9 @@ from gitlab import GitlabAuthenticationError, GitlabUpdateError
 
 from mkmr.api import API
 from mkmr.config import Config
+from mkmr.utils import prompt
 
 from . import __version__
-
-
-def prompt(s=None) -> None:
-    print(s) if s is not None else 0
-    input("Press Enter to continue...")
 
 
 def main():
