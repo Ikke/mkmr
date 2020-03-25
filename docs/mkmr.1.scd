@@ -87,6 +87,17 @@ url = https://gitlab.alpinelinux.org
 private_token = 123456789abcdefg
 ```
 
+# CACHE
+
+Every time that a merge request is created with mkmr, a file created under a
+directory called branch, under the mkmr cache directory, will be written. The
+name will be name of the source branch of the merge request and the contents
+of the file is the internal id of the merge request (the one that appears when
+one looks at the web interface, and the one used by mgmr and the GitLab API).
+
+This is done so programs can directly relate a branch and and a merge request
+without having to resort to network calls.
+
 # EXAMPLES
 
 The following show examples of how to use the different options that mkmr
