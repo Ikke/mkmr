@@ -46,7 +46,7 @@ mgmr - Merge merge requests in a GitLab instance
 mgmr is a python3 script that allows an user to merge merge requests in any
 GitLab instance.
 
-it makes uses of an ini-format configuration file to store the url of the
+It makes uses of an ini-format configuration file to store the url of the
 instance and the personal access token used to interact with the GitLab API of
 the hosted instance. And it uses information stored in the git repository in
 the form of remotes to guess which GitLab instance it should interact with.
