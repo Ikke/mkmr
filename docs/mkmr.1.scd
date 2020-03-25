@@ -102,18 +102,18 @@ These are the cache directories:
 
 Every time one of the utilities needs to interact with a project in GitLab it
 needs to know the project id assigned to that project. So instead of making an
-API call every time it just stores that in a value in a file with the following
-format:
+API call every time it just stores that in a value in a file within the
+following path, with the following name:
 
 ```
-domain.user.project
+$domain/$user/$project/project-id
 ```
 
 As an example if one contributes to alpine/aports from gitlab.alpinelinux.org
 the file would be:
 
 ```
-gitlab.alpinelinux.org.alpine.aports
+gitlab.alpinelinux.org/alpine/aports/project-id
 ```
 
 The content present within the file is the project id
@@ -124,7 +124,7 @@ Every time that a merge request is created with mkmr, a file will be created
 in the following location under the mkmr cache directory.
 
 ```
-branch/$domain/$user.$project/$branch
+branch/$domain/$user/$project/$branch
 ```
 
 domain is the domain of the hosted GitLab instance, user and project correspond
