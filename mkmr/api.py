@@ -65,11 +65,9 @@ class API:
         from pathlib import Path
         from os import getenv
 
-        cachefile = Path(self.uri.replace("https://", "").replace("/", "."))
-
         cachedir = getenv("XDG_CACHE_HOME")
         if cachedir is not None:
-            cachedir = create_dir(Path(cachedir, "mkmr"))
+            cachedir = Path(cachedir, "mkmr")
         else:
             homepath = getenv("HOME")
             if homepath is None:
@@ -77,9 +75,19 @@ class API:
                     "Neither XDG_CONFIG_HOME or HOME are set, please set XDG_CACHE_HOME"
                 )
             else:
-                cachedir = create_dir(Path(homepath, ".cache"))
+                cachedir = Path(homepath, ".cache")
 
-        cachepath = Path(cachedir / cachefile)
+        # The path should be, as an example taking alpine/aports from gitlab.alpinelinux.org
+        # $XDG_CACHE_HOME/mkmr/gitlab.alpinelinux.org/alpine/aports/project-id
+        cachedir = create_dir(
+            Path(
+                cachedir
+                / self.host.replace("https://", "").replace("/", ".")
+                / self.user
+                / self.project
+            )
+        )
+        cachepath = cachedir / "project-id"
 
         if cachepath.is_file():
             self.projectid = int(cachepath.read_text())
