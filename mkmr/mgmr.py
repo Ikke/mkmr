@@ -230,7 +230,7 @@ def main():
             continue
         elif attrs["rebase_in_progress"] is True:
             print(
-                name, "is currently rebasing, polling until it is no longer rebasing"
+                present, "is currently rebasing, polling until it is no longer rebasing"
             ) if not quiet else 0
             # This is the median value we found for it to take when rebasing on
             # gitlab.alpinelinux.org/alpine/aports which is a big repo that holds lots
@@ -259,7 +259,7 @@ def main():
             mr.merge()
         except GitlabMRClosedError as e:
             if e.response_code == 406:
-                print(name, "cannot be merged, trying to rebase") if not quiet else 0
+                print(present, "cannot be merged, trying to rebase") if not quiet else 0
                 try:
                     mr.rebase(skip_ci=True)
                 except GitlabMRRebaseError as e:
