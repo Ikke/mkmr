@@ -171,7 +171,16 @@ def main():
         if not k.isdigit():
             try:
                 cachepath = find_cache()
-                cachepath = cachepath / "branch" / k
+                # This path should be, taking alpine/aports from gitlab.alpinelinux.org as example:
+                # $XDG_CACHE_HOME/mkmr/gitlab.alpinelinux.org/alpine/aports/branches/$source_branch
+                cachepath = (
+                    cachepath
+                    / remote.host.replace("https://", "").replace("/", ".")
+                    / remote.user
+                    / remote.project
+                    / "branches"
+                    / k
+                )
                 k = cachepath.read_text()
             except FileNotFoundError:
                 print("Found invalid branch name {}".format(k)) if not quiet else 0
