@@ -167,12 +167,12 @@ def main():
         # Set our neddle in the list, k can be either the name of a branch of the internal id of a
         # merge request
         name = keys[n]
+        branch_path = None
         if name.isdigit():
             iid = name
             # the way we represent the internal id for printing
             present = iid
         else:
-            branch_path = None
             try:
                 cachepath = find_cache()
                 # This path should be, taking alpine/aports from gitlab.alpinelinux.org as example:
