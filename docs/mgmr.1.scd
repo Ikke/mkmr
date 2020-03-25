@@ -86,7 +86,7 @@ These are the cache directories:
 As written up on mkmr(1) CACHE section, a file is written under:
 
 ```
-branch/$domain/$user/$project/branches/$source_branch
+$XDG_CACHE_HOME/mkmr/$domain/$user/$project/branches/$source_branch
 ```
 
 That can be read to stablish a relationship between a branch name and the
