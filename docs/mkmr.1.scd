@@ -70,7 +70,7 @@ the form of remotes to guess which GitLab instance it should interact with.
 
 # CONFIGURATION
 
-mkmr will aggresively try to create a configuration file in the following path
+mkmr will aggressively try to create a configuration file in the following path
 under certain conditions:
 
 . $XDG_CONFIG_HOME/mkmr/config (if XDG_CONFIG_HOME is set)
@@ -131,10 +131,10 @@ domain is the domain of the hosted GitLab instance, user and project correspond
 to the user that owns the project and the name of the project, and branch is
 the name of the source branch
 
-the content within the file is the internal id (the one that appears in the
+The content within the file is the internal id (the one that appears in the
 web interface) of the merge request that was made from the source branch.
 
-This is done so programs can directly relate a branch and and a merge request
+This is done so programs can directly relate a branch and a merge request
 without having to resort to network calls.
 
 # EXAMPLES
@@ -193,5 +193,5 @@ branch will lead to mkmr guessing that the user wants to make the merge
 request against 3.11-stable.
 
 It will also prefix the title with a version number if one is making
-merge requests against one of the branches, merge requests targetting
+merge requests against one of the branches, merge requests targeting
 3.x-stable will have [3.x] prefixed to their title.
