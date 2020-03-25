@@ -70,6 +70,31 @@ url = https://gitlab.alpinelinux.org
 private_token = 123456789abcdefg
 ```
 
+# CACHE
+
+The cache directory holds various informations that is important to speed up
+operation of mkmr, if they are not present then calls to the gitlab instance
+are made instead which are much slower.
+
+These are the cache directories:
+
+. $XDG_CACHE_HOME/mkmr (if XDG_CACHE_HOME is set)
+. $HOME/.cache/mkmr (if XDG_CACHE_HOME is not set)
+
+## branch - merge request relation
+
+As written up on mkmr(1) CACHE section, a file is written under:
+
+```
+branch/$domain/$user/$project/branches/$source_branch
+```
+
+That can be read to stablish a relationship between a branch name and the
+internal id of a merge request.
+
+mgmr will use them to allow the user to call it with a branch name instead
+of the merge request
+
 # EXAMPLES
 
 The following show examples of how to use the different options that mkmr
