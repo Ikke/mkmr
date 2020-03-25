@@ -53,7 +53,7 @@ the form of remotes to guess which GitLab instance it should interact with.
 
 # CONFIGURATION
 
-mkmr will aggresively try to create a configuration file in the following path
+mgmr will aggresively try to create a configuration file in the following path
 under certain conditions:
 
 . $XDG_CONFIG_HOME/mkmr/config (if XDG_CONFIG_HOME is set)
@@ -73,7 +73,7 @@ private_token = 123456789abcdefg
 # CACHE
 
 The cache directory holds various informations that is important to speed up
-operation of mkmr, if they are not present then calls to the gitlab instance
+operation of mgmr, if they are not present then calls to the gitlab instance
 are made instead which are much slower.
 
 These are the cache directories:
@@ -97,7 +97,7 @@ of the merge request
 
 # EXAMPLES
 
-The following show examples of how to use the different options that mkmr
+The following show examples of how to use the different options that mgmr
 provides, note that almost all options can be mixed and match as you please:
 
 ## Merging lots of merge requests
