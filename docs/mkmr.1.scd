@@ -89,11 +89,50 @@ private_token = 123456789abcdefg
 
 # CACHE
 
-Every time that a merge request is created with mkmr, a file created under a
-directory called branch, under the mkmr cache directory, will be written. The
-name will be name of the source branch of the merge request and the contents
-of the file is the internal id of the merge request (the one that appears when
-one looks at the web interface, and the one used by mgmr and the GitLab API).
+The cache directory holds various informations that is important to speed up
+operation of mkmr, if they are not present then calls to the gitlab instance
+are made instead which are much slower.
+
+These are the cache directories:
+
+. $XDG_CACHE_HOME/mkmr (if XDG_CACHE_HOME is set)
+. $HOME/.cache/mkmr (if XDG_CACHE_HOME is not set)
+
+## Project IDs
+
+Every time one of the utilities needs to interact with a project in GitLab it
+needs to know the project id assigned to that project. So instead of making an
+API call every time it just stores that in a value in a file with the following
+format:
+
+```
+domain.user.project
+```
+
+As an example if one contributes to alpine/aports from gitlab.alpinelinux.org
+the file would be:
+
+```
+gitlab.alpinelinux.org.alpine.aports
+```
+
+The content present within the file is the project id
+
+## branch - merge request relation
+
+Every time that a merge request is created with mkmr, a file will be created
+in the following location under the mkmr cache directory.
+
+```
+branch/$domain/$user.$project/$branch
+```
+
+domain is the domain of the hosted GitLab instance, user and project correspond
+to the user that owns the project and the name of the project, and branch is
+the name of the source branch
+
+the content within the file is the internal id (the one that appears in the
+web interface) of the merge request that was made from the source branch.
 
 This is done so programs can directly relate a branch and and a merge request
 without having to resort to network calls.
