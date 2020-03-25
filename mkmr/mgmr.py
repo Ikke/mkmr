@@ -256,7 +256,7 @@ def main():
                 continue
 
         try:
-            mr.merge()
+            mr.merge(should_remove_source_branch="true")
         except GitlabMRClosedError as e:
             if e.response_code == 406:
                 print(present, "cannot be merged, trying to rebase") if not quiet else 0
