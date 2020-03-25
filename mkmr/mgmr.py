@@ -164,11 +164,15 @@ def main():
         if n + 1 > keys_len:
             break
 
-        # Set our neddle in the list
-        k = keys[n]
-
-        # Try to convert branch
-        if not k.isdigit():
+        # Set our neddle in the list, k can be either the name of a branch of the internal id of a
+        # merge request
+        name = keys[n]
+        if name.isdigit():
+            iid = name
+            # the way we represent the internal id for printing
+            present = iid
+        else:
+            branch_path = None
             try:
                 cachepath = find_cache()
                 # This path should be, taking alpine/aports from gitlab.alpinelinux.org as example:
@@ -179,47 +183,54 @@ def main():
                     / remote.user
                     / remote.project
                     / "branches"
-                    / k
+                    / name
                 )
-                k = cachepath.read_text()
+                branch_path = cachepath
+                iid = cachepath.read_text()
             except FileNotFoundError:
-                print("Found invalid branch name {}".format(k)) if not quiet else 0
-                queue[k] = "Invalid: branch name has no corresponding cache file"
+                print("Found invalid branch name {}".format(name)) if not quiet else 0
+                queue[name] = "Invalid: branch name has no corresponding cache file"
                 n += 1
-                continue
             else:
                 # This is executed in a try-catch if there are no exceptions raised
-                if k == "":
-                    print("Found invalid branch name {}".format(k)) if not quiet else 0
-                    queue[k] = "Invalid: branch name cache file is empty"
+                if iid == "":
+                    print("Found invalid branch name {}".format(name)) if not quiet else 0
+                    cachepath.unlink()  # Delete the file as it is empty
+                    queue[name] = "Invalid: branch name cache file is empty"
                     n += 1
-                    continue
+                # the way we represent the internal id for printing, in this case we do
+                # branch_name(internal_id)
+                present = "{}({})".format(name, iid)
 
         """
         Get the merge request, include_rebase_in_progress is required so
         we get information on whether we are rebasing
         """
-        mr = project.mergerequests.get(k, include_rebase_in_progress=True)
+        mr = project.mergerequests.get(iid, include_rebase_in_progress=True)
 
         attrs = mr.attributes
         if attrs["state"] == "merged":
-            print(k, "is already merged") if not quiet else 0
-            queue[k] = "Merge: already merged"
+            print(present, "is already merged") if not quiet else 0
+            if branch_path is not None:
+                branch_path.unlink()
+            queue[name] = "Merge: already merged"
             n += 1
             continue
         elif attrs["state"] == "closed":
-            print(k, "is closed") if not quiet else 0
-            queue[k] = "Merge: closed"
+            print(present, "is closed") if not quiet else 0
+            if branch_path is not None:
+                branch_path.unlink()
+            queue[name] = "Merge: closed"
             n += 1
             continue
         elif attrs["work_in_progress"] is True:
-            print(k, "is a work in progress, can't merge") if not quiet else 0
-            queue[k] = "Merge: work in progress"
+            print(present, "is a work in progress, can't merge") if not quiet else 0
+            queue[name] = "Merge: work in progress"
             n += 1
             continue
         elif attrs["rebase_in_progress"] is True:
             print(
-                k, "is currently rebasing, polling until it is no longer rebasing"
+                name, "is currently rebasing, polling until it is no longer rebasing"
             ) if not quiet else 0
             # This is the median value we found for it to take when rebasing on
             # gitlab.alpinelinux.org/alpine/aports which is a big repo that holds lots
@@ -227,8 +238,8 @@ def main():
             sleep(3)
             continue
         elif attrs["rebase_in_progress"] is False and attrs["merge_error"] is not None:
-            print(k, attrs["merge_error"]) if not quiet else 0
-            queue[k] = "Rebase: " + attrs["merge_error"]
+            print(present, attrs["merge_error"]) if not quiet else 0
+            queue[name] = "Rebase: " + attrs["merge_error"]
             n += 1
             continue
         elif attrs["pipeline"]["status"] == "failed":
@@ -239,8 +250,8 @@ def main():
             else:
                 choice = options.yes
             if choice is False:
-                print(k, "skipped by the user because CI pipeline failed") if not quiet else 0
-                queue[k] = "Merge: canceled by user prompt"
+                print(present, "skipped by the user because CI pipeline failed") if not quiet else 0
+                queue[name] = "Merge: canceled by user prompt"
                 n += 1
                 continue
 
@@ -248,32 +259,34 @@ def main():
             mr.merge()
         except GitlabMRClosedError as e:
             if e.response_code == 406:
-                print(k, "cannot be merged, trying to rebase") if not quiet else 0
+                print(name, "cannot be merged, trying to rebase") if not quiet else 0
                 try:
                     mr.rebase(skip_ci=True)
                 except GitlabMRRebaseError as e:
                     if e.response_code == 403:
                         print("Rebase failed:", e.error_message) if not quiet else 0
-                        queue[k] = "Rebase: " + e.error_message
+                        queue[name] = "Rebase: " + e.error_message
                         n += 1
                         continue
                 else:
                     continue
             elif e.response_code == 401:
                 print("Merge failed:", e.error_message) if not quiet else 0
-                queue[k] = "Merge: " + e.error_message
+                queue[name] = "Merge: " + e.error_message
                 n += 1
                 continue
             elif e.response_code == 405:
                 print("Merge failed:", e.error_message) if not quiet else 0
-                queue[k] = "Merge: " + e.error_message
+                queue[name] = "Merge: " + e.error_message
                 n += 1
             else:
                 print(e.error_message, "aborting completely")
                 sys.exit(1)
         else:
-            print("Merged", k) if not quiet else 0
-            queue[k] = "merged"
+            print("Merged", present) if not quiet else 0
+            queue[name] = "merged"
+            if branch_path is not None:
+                branch_path.unlink()
             n += 1
 
     print(dumps(queue, indent=4))
