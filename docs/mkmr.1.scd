@@ -124,7 +124,7 @@ Every time that a merge request is created with mkmr, a file will be created
 in the following location under the mkmr cache directory.
 
 ```
-branch/$domain/$user/$project/branches/$source_branch
+$XDG_CACHE_HOME/mkmr/$domain/$user/$project/branches/$source_branch
 ```
 
 domain is the domain of the hosted GitLab instance, user and project correspond
