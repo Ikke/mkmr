@@ -144,25 +144,35 @@ provides, note that almost all options can be mixed and match as you please:
 
 ## Targetting other branches
 
+```
 mkmr --source=FOO --target=BAR
+```
 
 ## Use another configuration file
 
+```
 mkmr --config=/path/to/temporary/configuration
+```
 
 ## Permanently switching to a new token
 
+```
 mkmr --token=NewTokenSoNice --overwrite
+```
 
 ## Title and description
 
+```
 mkmr --title="This is an amazing merge request"
 
 mkmr --title="Not Amazing Merge Request" --description="Sike!"
+```
 
 ## Labels
 
+```
 mkmr --labels=help-wanted,good-first-issue
+```
 
 # ALPINE LINUX
 
