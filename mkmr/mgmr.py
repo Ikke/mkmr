@@ -285,6 +285,11 @@ def main():
         else:
             print("Merged", present) if not quiet else 0
             queue[name] = "merged"
+            # Switch to master if our current branch is the active branch
+            if name != iid:
+                if name == repo.active_branch.name:
+                    repo.git.checkout("master")
+                repo.git.branch("-D", name)
             if branch_path is not None:
                 branch_path.unlink()
             n += 1
