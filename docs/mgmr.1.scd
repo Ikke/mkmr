@@ -102,14 +102,26 @@ provides, note that almost all options can be mixed and match as you please:
 
 ## Merging lots of merge requests
 
+```
 mgmr 1 2 3
+```
 
 ## Use another configuration file
 
+```
 mgmr --config=/path/to/temporary/configuration
+```
 
 ## Permanently switching to a new token
 
+```
 mgmr --token=NewTokenSoNice --overwrite
+```
+
+## Merge via branch name (branch in this case is named foo)
+
+```
+mgmr foo
+```
 
 ; TODO: write about	the loop we use to merge multiple MRs
