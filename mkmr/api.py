@@ -1,7 +1,7 @@
 from git import Repo
 from giturlparse import parse
 
-from mkmr.utils import create_dir
+from mkmr.utils import create_dir, find_cache
 
 
 class API:
@@ -59,33 +59,13 @@ class API:
         self.endpoint = self.endpoint + self.user + "%2F" + self.project
 
     def projectid(self, token=None) -> int:
-        """
-        Try to get cached project id
-        """
-        from pathlib import Path
-        from os import getenv
-
-        cachedir = getenv("XDG_CACHE_HOME")
-        if cachedir is not None:
-            cachedir = Path(cachedir, "mkmr")
-        else:
-            homepath = getenv("HOME")
-            if homepath is None:
-                raise ValueError(
-                    "Neither XDG_CONFIG_HOME or HOME are set, please set XDG_CACHE_HOME"
-                )
-            else:
-                cachedir = Path(homepath, ".cache")
-
         # The path should be, as an example taking alpine/aports from gitlab.alpinelinux.org
         # $XDG_CACHE_HOME/mkmr/gitlab.alpinelinux.org/alpine/aports/project-id
         cachedir = create_dir(
-            Path(
-                cachedir
-                / self.host.replace("https://", "").replace("/", ".")
-                / self.user
-                / self.project
-            )
+            find_cache()
+            / self.host.replace("https://", "").replace("/", ".")
+            / self.user
+            / self.project
         )
         cachepath = cachedir / "project-id"
 
