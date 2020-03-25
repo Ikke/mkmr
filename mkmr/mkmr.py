@@ -320,7 +320,16 @@ def main():
     print("url:", mr.attributes["web_url"])
 
     try:
-        cachepath = create_file(find_cache() / "branch" / source_branch)
+        # This path should be, taking alpine/aports from gitlab.alpinelinux.org as example:
+        # $XDG_CACHE_HOME/mkmr/gitlab.alpinelinux.org/alpine/aports/branches/$source_branch
+        cachepath = create_file(
+            find_cache()
+            / upstream.host.replace("https://", "").replace("/", ".")
+            / upstream.user
+            / upstream.project
+            / "branches"
+            / source_branch
+        )
         cachepath.write_text(str(mr.attributes["iid"]))
     except ValueError:
         print("Failed to write to cache, merging via branch won't be available")
