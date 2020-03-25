@@ -109,7 +109,7 @@ def main():
             )
             mrnum = cachepath.read_text()
         except FileNotFoundError:
-            print("arg given, {}, has no corresponding cache file".format(name))
+            print("branch name given, {}, has no corresponding cache file".format(name))
             sys.exit(1)
         else:
             # This is executed in a try-catch if there are no exceptions raised
