@@ -1,6 +1,8 @@
-from pathlib import Path
 from os import getenv
+from pathlib import Path
 from typing import Optional
+
+from git import Repo, exc
 
 
 def strtobool(s) -> Optional[bool]:
@@ -80,3 +82,24 @@ def find_cache() -> Path:
     if xdgpath is None:
         xdgpath = Path(homepath)
         return create_dir(xdgpath / ".cache" / "mkmr")
+
+
+def init_repo(path=None) -> Optional[Repo]:
+    if path is None:
+        path = Path(getenv("PWD"))
+
+    def _init_repo(path) -> Repo:
+        try:
+            repo = Repo(path)
+        except exc.InvalidGitRepositoryError:
+            if path == Path("/"):
+                raise
+            return _init_repo(path=path.parent)
+        else:
+            return repo
+
+    try:
+        return _init_repo(path)
+    except exc.InvalidGitRepositoryError:
+        print("Failed to start repo at {} or any of its parent directories".format(path))
+        return None
