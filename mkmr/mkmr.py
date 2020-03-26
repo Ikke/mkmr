@@ -203,11 +203,10 @@ def main():
     query = options.upstream + "/" + target_branch
     query = query + ".." + source_branch
     commits = list(repo.iter_commits(query))
-    commit_count = len(commits)
 
     # Fail early if we are creating a merge request without commits in difference
     # to the target branch
-    if commit_count < 1:
+    if (commit_count := len(commits)) < 1:
         print("no commits in difference between {}".format(query.replace("..", " and ")))
         sys.exit(1)
 
