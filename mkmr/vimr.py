@@ -9,7 +9,7 @@ from gitlab import GitlabAuthenticationError, GitlabUpdateError
 
 from mkmr.api import API
 from mkmr.config import Config
-from mkmr.utils import find_cache, prompt
+from mkmr.utils import find_cache, prompt, init_repo
 
 from . import __version__
 

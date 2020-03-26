@@ -6,7 +6,7 @@ from gitlab import GitlabAuthenticationError, GitlabUpdateError
 
 from mkmr.api import API
 from mkmr.config import Config
-from mkmr.utils import strtobool
+from mkmr.utils import strtobool, init_repo
 
 from . import __version__
 

@@ -9,7 +9,7 @@ from gitlab import GitlabMRClosedError, GitlabMRRebaseError
 
 from mkmr.api import API
 from mkmr.config import Config
-from mkmr.utils import find_cache
+from mkmr.utils import find_cache, init_repo
 
 from . import __version__
 
