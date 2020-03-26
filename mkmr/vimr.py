@@ -81,7 +81,8 @@ def main():
     mrnum = args[1]
 
     # Initialize our repo object based on the local repo we have
-    repo = Repo()
+    if (repo := init_repo()) is None:
+        sys.exit(1)
 
     remote = API(repo, options.remote)
 

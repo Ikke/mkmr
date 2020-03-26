@@ -8,7 +8,7 @@ from git import Repo, exc
 
 from mkmr.api import API
 from mkmr.config import Config
-from mkmr.utils import create_dir, create_file, find_cache
+from mkmr.utils import create_file, find_cache, init_repo
 
 from . import __version__
 
@@ -134,7 +134,8 @@ def main():
         sys.exit(1)
 
     # Initialize our repo object based on the local repo we have
-    repo = Repo()
+    if (repo := init_repo()) is None:
+        sys.exit(1)
 
     # Call the API using our local repo and have one for remote
     # origin and remote upstream
