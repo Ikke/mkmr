@@ -6,7 +6,7 @@ from gitlab import GitlabAuthenticationError, GitlabUpdateError
 
 from mkmr.api import API
 from mkmr.config import Config
-from mkmr.utils import strtobool, init_repo
+from mkmr.utils import find_cache, init_repo, strtobool
 
 from . import __version__
 
@@ -93,6 +93,31 @@ def main():
         sys.exit(1)
 
     gl = config.get_gitlab()
+
+    name = mrnum
+    if not mrnum.isdigit():
+        try:
+            cachepath = find_cache()
+            # This path should be, taking alpine/aports from gitlab.alpinelinux.org as example:
+            # $XDG_CACHE_HOME/mkmr/gitlab.alpinelinux.org/alpine/aports/branches/$source_branch
+            cachepath = (
+                cachepath
+                / remote.host.replace("https://", "").replace("/", ".")
+                / remote.user
+                / remote.project
+                / "branches"
+                / name
+            )
+            mrnum = cachepath.read_text()
+        except FileNotFoundError:
+            print("branch name given, {}, has no corresponding cache file".format(name))
+            sys.exit(1)
+        else:
+            # This is executed in a try-catch if there are no exceptions raised
+            if mrnum == "":
+                print("cache file for {} is empty".format(name))
+                cachepath.unlink()  # Delete the file as it is empty
+                sys.exit(1)
 
     project = gl.projects.get(
         remote.projectid(token=gl.private_token), retry_transient_errors=True, lazy=True
