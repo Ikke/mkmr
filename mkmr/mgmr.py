@@ -192,6 +192,7 @@ def main():
                 print("Found invalid branch name {}".format(name)) if not quiet else 0
                 queue[name] = "Invalid: branch name has no corresponding cache file"
                 n += 1
+                continue
             else:
                 # This is executed in a try-catch if there are no exceptions raised
                 if iid == "":
@@ -199,6 +200,7 @@ def main():
                     cachepath.unlink()  # Delete the file as it is empty
                     queue[name] = "Invalid: branch name cache file is empty"
                     n += 1
+                    continue
                 # the way we represent the internal id for printing, in this case we do
                 # branch_name(internal_id)
                 present = "{}({})".format(name, iid)
