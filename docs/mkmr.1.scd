@@ -89,14 +89,7 @@ private_token = 123456789abcdefg
 
 # CACHE
 
-The cache directory holds various informations that is important to speed up
-operation of mkmr, if they are not present then calls to the gitlab instance
-are made instead which are much slower.
-
-These are the cache directories:
-
-. $XDG_CACHE_HOME/mkmr (if XDG_CACHE_HOME is set)
-. $HOME/.cache/mkmr (if XDG_CACHE_HOME is not set)
+See mkmr-cache(7)
 
 ## Project IDs
 
