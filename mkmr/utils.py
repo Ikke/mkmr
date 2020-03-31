@@ -79,9 +79,9 @@ def find_cache() -> Path:
     if homepath is None:
         raise ValueError("Neither XDG_CACHE_HOME or HOME are set, please set XDG_CACHE_HOME")
 
-    if xdgpath is None:
-        xdgpath = Path(homepath)
-        return create_dir(xdgpath / ".cache" / "mkmr")
+    if homepath is not None:
+        homepath = Path(homepath)
+        return create_dir(homepath / ".cache" / "mkmr")
 
 
 def init_repo(path=None) -> Optional[Repo]:
