@@ -37,6 +37,12 @@ class API:
                 "url from remote '{}' has no valid URL: {}".format(remote, self.uri)
             )
         try:
+            # Some people have a remote that is
+            # git@gitlab.alpinelinux.org:/User/Project.git
+            # The / in /User causes problems when using pathlib, so strip it here to avoid any
+            # future problems
+            if p.owner[0] == "/":
+                p.owner = p.owner[1:]
             self.user = p.owner
         except AttributeError:
             raise AttributeError(
