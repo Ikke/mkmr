@@ -175,11 +175,10 @@ def main():
             present = iid
         else:
             try:
-                cachepath = find_cache()
                 # This path should be, taking alpine/aports from gitlab.alpinelinux.org as example:
                 # $XDG_CACHE_HOME/mkmr/gitlab.alpinelinux.org/alpine/aports/branches/$source_branch
                 cachepath = (
-                    cachepath
+                    find_cache()
                     / remote.host.replace("https://", "").replace("/", ".")
                     / remote.user
                     / remote.project
