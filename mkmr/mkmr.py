@@ -5,6 +5,7 @@ from typing import Optional
 import editor
 import inquirer
 from git import Repo, exc
+from gitlab import GitlabCreateError
 
 from mkmr.api import API
 from mkmr.config import Config
@@ -306,19 +307,28 @@ def main():
         origin.projectid(token=gl.private_token), retry_transient_errors=True, lazy=True
     )
 
-    mr = origin_project.mergerequests.create(
-        {
-            "source_branch": source_branch,
-            "target_branch": target_branch,
-            "title": title,
-            "description": description,
-            "target_project_id": upstream.projectid(token=gl.private_token),
-            "labels": labels,
-            "allow_maintainer_to_push": True,
-            "remove_source_branch": True,
-        },
-        retry_transient_errors=True,
-    )
+    try:
+        mr = origin_project.mergerequests.create(
+            {
+                "source_branch": source_branch,
+                "target_branch": target_branch,
+                "title": title,
+                "description": description,
+                "target_project_id": upstream.projectid(token=gl.private_token),
+                "labels": labels,
+                "allow_maintainer_to_push": True,
+                "remove_source_branch": True,
+            },
+            retry_transient_errors=True,
+        )
+    except GitlabCreateError as e:
+        if e.response_code == 409:
+            print(
+                "Failed to create merge request see below for error message:\n{}".format(
+                    e.error_message
+                )
+            )
+            sys.exit(1)
 
     print("id:", mr.attributes["iid"])
     print("title:", mr.attributes["title"])
