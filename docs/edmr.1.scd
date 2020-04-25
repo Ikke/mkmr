@@ -34,6 +34,9 @@ edmr - Programmatically edit attributes of merge requests
 *--remote* <REMOTE>
 	Which remote to operate from
 
+*-l, --list*
+	Print which values edmr accepts for changing attributes in the Merge Request
+
 # DESCRIPTION
 
 edmr is a python3 script that allows an user to edit attributes of the merge
