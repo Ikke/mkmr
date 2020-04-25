@@ -51,11 +51,11 @@ def print_values():
         elif val == "assignee_id":
             print("{} -> integer".format(val))
         elif val == "assignee_ids":
-            print("{} -> multiple integers".format(val))
+            print("{} -> multiple integers separated by whitespace".format(val))
         elif val == "labels" or val == ":labels" or val == "labels:":
-            print("{} -> one or more strings".format(val))
+            print("{} -> one or more strings separated by whitespace".format(val))
         else:
-            print("{} -> string".format(val))
+            print("{} -> a single string".format(val))
 
 
 def main():
