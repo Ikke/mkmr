@@ -14,7 +14,7 @@ from mkmr.utils import create_file, find_cache, init_repo
 from . import __version__
 
 
-def printok(s: str) -> None:
+def msg(s: str) -> None:
     print("\033[1;32m>>>\033[1;0m {}".format(s))
 
 
@@ -193,7 +193,7 @@ def main():
             repo.heads[source_branch].checkout()
 
         try:
-            printok("Rebasing {} on top of {}".format(source_branch, target_branch))
+            msg("Rebasing {} on top of {}".format(source_branch, target_branch))
             repo.git.pull("--quiet", options.upstream, "--rebase", target_branch)
         except exc.GitCommandError as e:
             # There are multiple reasons that GitCommandError can be raised, try to guess based on
@@ -210,6 +210,8 @@ def main():
                     "{}".format(source_branch, target_branch, e.stdout)
                 )
             sys.exit(1)
+        else:
+            msg("Rebased {} on top of {}".format(source_branch, target_branch))
 
         try:
             # Overwrite the changes in the upstream branch by force-pushing
@@ -217,7 +219,7 @@ def main():
             #
             # git push --quiet --force --set-upstream origin source_branch
             #
-            printok("Pushing {0} to {1}/{0}".format(source_branch, options.origin))
+            msg("Pushing {0} to {1}/{0}".format(source_branch, options.origin))
             repo.git.push("--quiet", "--force", "--set-upstream", options.origin, source_branch)
         except exc.GitCommandError as e:
             print(
@@ -226,6 +228,8 @@ def main():
                 )
             )
             sys.exit(1)
+        else:
+            msg("Pushed {0} to {1}/{0}".format(source_branch, options.origin))
 
     query = options.upstream + "/" + target_branch
     query = query + ".." + source_branch
