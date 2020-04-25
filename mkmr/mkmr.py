@@ -378,7 +378,9 @@ def main():
         )
         cachepath.write_text(str(mr.attributes["iid"]))
     except ValueError:
-        print("Failed to write to cache, merging via branch won't be available")
+        print(
+            "Failed to write to cache, merging by passing the name of the branch won't be available"
+        )
         print("Error: {}".format(sys.exc_info()[0]))
 
 
