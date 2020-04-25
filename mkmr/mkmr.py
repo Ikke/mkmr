@@ -177,6 +177,11 @@ def main():
 
     # git pull --rebase the source branch on top of the target branch
     if options.dry_run is False:
+        # Check if we are dirty and abort if we are
+        if repo.is_dirty():
+            print("The repo has untracked files, please commit or stash the changes")
+            sys.exit(1)
+
         # Switch to another branch if we were given --source
         # otherwise we will do a git pull into the wrong branch
         if repo.head.reference != source_branch:
