@@ -206,6 +206,21 @@ def main():
                 )
             sys.exit(1)
 
+        try:
+            # Overwrite the changes in the upstream branch by force-pushing
+            # This is equivalent to:
+            #
+            # git push --quiet --force --set-upstream origin source_branch
+            #
+            repo.git.push("--quiet", "--force", "--set-upstream", options.origin, source_branch)
+        except exc.GitCommandError as e:
+            print(
+                "Failed to push changes from {0} to {1}/{0}. See error below\n{2}".format(
+                    source_branch, options.origin, e.stderr
+                )
+            )
+            sys.exit(1)
+
     query = options.upstream + "/" + target_branch
     query = query + ".." + source_branch
     commits = list(repo.iter_commits(query))
