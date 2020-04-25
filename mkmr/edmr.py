@@ -10,6 +10,53 @@ from mkmr.utils import find_cache, init_repo, strtobool
 
 from . import __version__
 
+# Store all valid values in a set we can check for validity
+# we also print them after some processing for the user so
+# they know what attributes of a merge request they can modify
+# and what kind of input (boolean, string, integer, etc...) each
+# attribute takes
+VALID_VALUES = {
+    "assignee_id",
+    "assignee_ids",
+    ":description",
+    "description",
+    "description:",
+    ":labels",
+    "labels",
+    "labels:",
+    "milestone_id",
+    "remove_source_branch",
+    "state_event",
+    "target_branch",
+    ":title",
+    "title",
+    "title:",
+    "discussion_locked",
+    "squash",
+    "allow_collaboration",
+    "allow_maintainer_to_push",
+}
+
+
+def print_values():
+    for val in iter(VALID_VALUES):
+        if (
+            val == "remove_source_branch"
+            or val == "squash"
+            or val == "discussion_locked"
+            or val == "allow_collaboration"
+            or val == "allow_maintainer_to_push"
+        ):
+            print("{} -> boolean".format(val))
+        elif val == "assignee_id":
+            print("{} -> integer".format(val))
+        elif val == "assignee_ids":
+            print("{} -> multiple integers".format(val))
+        elif val == "labels" or val == ":labels" or val == "labels:":
+            print("{} -> one or more strings".format(val))
+        else:
+            print("{} -> string".format(val))
+
 
 def main():
     parser = OptionParser(version=__version__)
@@ -63,8 +110,20 @@ def main():
         default="upstream",
         help="which remote from which to operate on",
     )
+    parser.add_option(
+        "-l",
+        "--list",
+        dest="list",
+        action="store_true",
+        default=False,
+        help="Show list of attributes that can be modified",
+    )
 
     (options, args) = parser.parse_args(sys.argv)
+
+    if options.list is True:
+        print_values()
+        sys.exit(0)
 
     if len(args) < 2:
         print("no merge request given")
@@ -124,33 +183,11 @@ def main():
     )
     mr = project.mergerequests.get(mrnum, include_rebase_in_progress=True)
 
-    # Store all valid values in a set we can check for validity
-    valid_values = {
-        "assignee_id",
-        "assignee_ids",
-        ":description",
-        "description",
-        "description:",
-        ":labels",
-        "labels",
-        "labels:",
-        "milestone_id",
-        "remove_source_branch",
-        "state_event",
-        "target_branch",
-        ":title",
-        "title",
-        "title:",
-        "discussion_locked",
-        "squash",
-        "allow_collaboration",
-        "allow_maintainer_to_push",
-    }
     for arg in args[2:]:
         should_skip = False
 
         k = arg.split("=")[0]
-        if k not in valid_values:
+        if k not in VALID_VALUES:
             continue
         try:
             v = arg.split("=")[1]
