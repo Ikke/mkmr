@@ -14,6 +14,10 @@ from mkmr.utils import create_file, find_cache, init_repo
 from . import __version__
 
 
+def printok(s: str) -> None:
+    print("\033[1;32m>>>\033[1;0m {}".format(s))
+
+
 def alpine_stable_prefix(str: str) -> Optional[str]:
     if str.startswith("3.8-"):
         return "3.8"
@@ -189,6 +193,7 @@ def main():
             repo.heads[source_branch].checkout()
 
         try:
+            printok("Rebasing {} on top of {}".format(source_branch, target_branch))
             repo.git.pull("--quiet", options.upstream, "--rebase", target_branch)
         except exc.GitCommandError as e:
             # There are multiple reasons that GitCommandError can be raised, try to guess based on
@@ -212,6 +217,7 @@ def main():
             #
             # git push --quiet --force --set-upstream origin source_branch
             #
+            printok("Pushing {0} to {1}/{0}".format(source_branch, options.origin))
             repo.git.push("--quiet", "--force", "--set-upstream", options.origin, source_branch)
         except exc.GitCommandError as e:
             print(
