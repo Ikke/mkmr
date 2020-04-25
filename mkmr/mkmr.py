@@ -4,7 +4,7 @@ from typing import Optional
 
 import editor
 import inquirer
-from git import Repo, exc
+from git import exc
 from gitlab import GitlabCreateError
 
 from mkmr.api import API
