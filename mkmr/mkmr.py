@@ -193,7 +193,9 @@ def main():
             repo.heads[source_branch].checkout()
 
         try:
-            msg("Rebasing {} on top of {}".format(source_branch, target_branch))
+            msg(
+                "Rebasing {} on top of {}/{}".format(source_branch, options.upstream, target_branch)
+            )
             repo.git.pull("--quiet", options.upstream, "--rebase", target_branch)
         except exc.GitCommandError as e:
             # There are multiple reasons that GitCommandError can be raised, try to guess based on
@@ -201,17 +203,17 @@ def main():
             # specific subtype that would tell us what it is but we can not rely on that
             if "You have unstaged changes" in e.stderr:
                 print(
-                    "Rebasing {} on top of {} failed!\n There are unstaged changes, please commit "
-                    "or stash them".format(source_branch, target_branch)
+                    "Rebasing {} on top of {}/{} failed!\n There are unstaged changes, please "
+                    "commit or stash them".format(source_branch, options.upstream, target_branch)
                 )
             if "Failed to merge in the changes" in e.stderr:
                 print(
-                    "Rebasing {} on top of {} failed!\n Please check the output below:\n\n"
-                    "{}".format(source_branch, target_branch, e.stdout)
+                    "Rebasing {} on top of {}/{} failed!\n Please check the output below:\n\n"
+                    "{}".format(source_branch, options.upstream, target_branch, e.stdout)
                 )
             sys.exit(1)
         else:
-            msg("Rebased {} on top of {}".format(source_branch, target_branch))
+            msg("Rebased {} on top of {}/{}".format(source_branch, options.upstream, target_branch))
 
         try:
             # Overwrite the changes in the upstream branch by force-pushing
