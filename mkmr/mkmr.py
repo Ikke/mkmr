@@ -354,7 +354,7 @@ def main():
             retry_transient_errors=True,
         )
     except GitlabCreateError as e:
-        if e.response_code == 409:
+        if e.response_code in (403, 409):
             print(
                 "Failed to create merge request see below for error message:\n{}".format(
                     e.error_message
