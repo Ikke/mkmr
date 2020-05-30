@@ -27,6 +27,8 @@ def alpine_stable_prefix(str: str) -> Optional[str]:
         return "3.10"
     elif str.startswith("3.11-"):
         return "3.11"
+    elif str.startswith("3.12-"):
+        return "3.12"
     else:
         return None
 
