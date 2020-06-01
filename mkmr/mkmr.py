@@ -260,20 +260,20 @@ def main():
     # reviewers and developers sort out what is important
     if alpine is True:
         for s in commit_titles:
-            if ": new aport" in s and "A-add" not in labels:
-                labels.append("A-add")
+            if ": new aport" in s and "aports:add" not in labels:
+                labels.append("aports:add")
                 continue
-            if ": move from " in s and "A-move" not in labels:
-                labels.append("A-move")
+            if ": move from " in s and "aports:move" not in labels:
+                labels.append("aports:move")
                 continue
-            if ": upgrade to " in s and "A-upgrade" not in labels:
-                labels.append("A-upgrade")
+            if ": upgrade to " in s and "aports:upgrade" not in labels:
+                labels.append("aports:upgrade")
                 continue
-            if (": security upgrade to " in s or ": fix CVE-" in s) and "T-security" not in labels:
-                labels.append("T-Security")
+            if (": security upgrade to " in s or ": fix CVE-" in s) and "tag:security" not in labels:
+                labels.append("tag:security")
                 continue
         if alpine_prefix is not None:
-            labels.append("A-backport")
+            labels.append("aports:backport")
             labels.append("v" + alpine_prefix)
 
     if commit_count == 1:
